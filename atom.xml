@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  
+  <title>The trnscofi blog</title>
+  <link href="http://blog.trnscofi.in/atom.xml" rel="self" />
+  <link href="http://blog.trnscofi.in" />
+  <updated>2010-08-15T22:00:11+05:30</updated>
+  <id>http://blog.trnscofi.in/</id>
+  
+  <author>
+    <name>Gautam Chekuri</name>
+    <email>gautam.chekuri@gmail.com</email>
+  </author>
+  
+  
+  <entry>
+    <title>Introducing Trnscofi</title>
+    <link href="http://blog.trnscofi.in/2010/09/14/introducing-trnscofi.html"/>
+    <updated>2010-09-14T00:00:00+05:30</updated>
+    <id>http://blog.trnscofi.in/2010/09/14/introducing-trnscofi</id>
+    <content type="html">&lt;h1&gt;Introducing Trnscofi&lt;/h1&gt;
+&lt;p class=&quot;meta&quot;&gt;14 Aug 2019&lt;/p&gt;
+&lt;p&gt;Trnscofi ( http://blog.trnscofi.in/ ) has been bootstrapped is on slicehost! I choose slicehost since it offered the most afforadable and flexible &lt;span class=&quot;caps&quot;&gt;GNU&lt;/span&gt;/Linux server. For $20 (about 900 &lt;span class=&quot;caps&quot;&gt;INR&lt;/span&gt; appx) a month, I get to have a debian lenny server where I can try out all my web experiments. Not a bad deal at all, my monthly mobile bill also adds up to a similar amount! Utility computing at its best, I&amp;#8217;d say!&lt;/p&gt;</content>
+  </entry>
+  
+  
+</feed>
