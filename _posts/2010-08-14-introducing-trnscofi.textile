@@ -20,10 +20,12 @@ The workflow for adding a blog post looks something like this:
 * $ touch _posts/2010-08-14-introducing-trnscofi.textile
 * # Open _posts/2010-08-14-introducing-trnscofi.textile in emacs and edit it
 * $ jekyll
+* # Open index.html and add the index entry for the new blog post
 * $ jekyll --server
 * # Check if everything looks as planned at: http://127.0.0.1:4000
 * $ git add/commit/push
-* $ cap deploy blog
+* $ cap deploy_blog # Reuqired only for the first time
+* $ cap gen_blog # Required every time we want to edit/publish existing/new posts
 * # http://blog.trsncofi.in/ has the lastest blog post deployed!
 
 </div>
