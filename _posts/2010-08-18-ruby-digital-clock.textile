@@ -1,0 +1,110 @@
+---
+layout: post
+title: Implementing a digital clock in ruby
+---
+
+h3. {{ page.title }}
+
+p(meta). 18 Aug 2010
+
+<div class="post_payload">
+I wrote a small ruby script that prints a digital clock in ASCII based on Time.now
+
+Essentially, this approach implements and uses an encoded string that encodes in its value all the information that a 2 dimensional Array would have in order to implement a dgital clock.
+
+The inspiration was a digital clock perl obfuscation, though I have made no attempt to obfuscated. Also, I havnt used the Ruby equivalent of the Perl vec() (BitVector).
+http://alixandalex.com/obfuscated-signatures/more_sigs.html
+
+It runs on VT100 terminals (xterm etc on GNU/Linux). http://www.termsys.demon.co.uk/vtansi.htm
+
+Each digit from 0 .. 9 is represented as a subset of 8's digital representation.
+Each | or _ has a ordinal number, as given below:
+
+<pre>
+ _
+|_|
+|_|
+  
+ 0
+123
+456
+
+</pre>
+
+
+The follow table lists which points(| or _) are to be displayed(1) for a given digit:
+
+<pre>
+
+point
+ | digit ->  1  2  3  4  5  6  7  8  9  0
+ v
+pt 1     -   0  1  1  0  1  1  1  1  1  1   -> display _
+pt 2     -   1  0  0  1  1  1  0  1  1  1
+pt 3     -   0  1  1  1  1  1  0  1  1  0   -> display _
+pt 4     -   0  1  1  1  0  0  1  1  1  1
+pt 5     -   1  1  0  0  0  1  0  1  0  1
+pt 6     -   0  1  1  0  1  1  0  1  1  1   -> display _
+pt 7     -   0  0  1  1  1  1  1  1  1  1
+
+</pre>
+
+Given the above information, the following is the little-endian representation in hex for each digit:
+
+<pre>
+
+0 -> 1101 1110 -> 11 7 -> 7B
+1 -> 0100 1000 -> 2  1 -> 12
+2 -> 1011 1100 -> 13 3 -> 3D
+3 -> 1011 0110 -> 13 6 -> 6D
+4 -> 0111 0010 -> 14 4 -> 4E
+5 -> 1110 0110 -> 7  6 -> 67
+6 -> 1110 1110 -> 7  7 -> 77
+7 -> 1001 0010 -> 9  4 -> 49
+8 -> 1111 1110 -> 15 7 -> 7F
+9 -> 1111 0110 -> 15 6 -> 6F
+
+</pre>
+
+And finally, the code:
+
+<pre>
+
+#!/usr/local/bin/ruby
+
+loop do
+  row = 1
+  col = 6
+  sleep 1
+  # clear the screen
+  print "\ec"
+  #"1234567890".scan( /./ ) {
+  Time.new.strftime("%H%M%S").scan( /./ ) {    |c|
+    # unpack each digit in the current time into the binary representation for that digit
+    # in our digital clock
+    "7B123D6D4E6777497F6F".unpack( "x" + (2*$&.to_i).to_s + "a2" ).map {
+      |x| x.hex
+    }.pack( "v" ).unpack( "b8" ).first.split( // ).each_with_index {
+      |elem, idx|
+      # print each digit on the VT100 termnial
+      idx = idx.to_i
+      elem = elem.to_i
+      if ( elem == 1 )
+        row = idx == 0 ? 1 : idx > 0 && idx < 4 ? 2 : 3
+        if( idx == 0 || idx == 2 || idx == 5 )
+          print "\e[#{row};#{col+1}H_\n"
+        elsif ( idx == 1 || idx == 4 )
+          print "\e[#{row};#{col}H|\n"
+        else
+          print "\e[#{row};#{col+2}H|\n"
+        end
+      end
+    }
+    col = col + 4
+  }
+  redo
+end
+
+</pre>
+
+</div>

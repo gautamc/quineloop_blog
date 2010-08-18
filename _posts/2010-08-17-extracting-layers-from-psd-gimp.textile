@@ -1,6 +1,6 @@
 ---
 layout: post
-title: gimp-image-get-layers - Using the Gimp to extract layers from a psd
+title: gimp-image-get-layers - programming the Gimp to extract layers from a psd using scheme
 ---
 
 h3. {{ page.title }}
