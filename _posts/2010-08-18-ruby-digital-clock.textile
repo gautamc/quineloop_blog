@@ -8,7 +8,7 @@ h3. {{ page.title }}
 p(meta). 18 Aug 2010
 
 <div class="post_payload">
-I wrote a small ruby script that prints a digital clock in ASCII based on Time.now
+I had written a small ruby script that prints a digital clock in ASCII based on Time.now
 
 Essentially, this approach implements and uses an encoded string that encodes in its value all the information that a 2 dimensional Array would have in order to implement a dgital clock.
 
