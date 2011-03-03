@@ -1,0 +1,3 @@
+[submodule "code/stars"]
+	path = code/stars
+	url = git@github.com:gautamc/star_rating.git
