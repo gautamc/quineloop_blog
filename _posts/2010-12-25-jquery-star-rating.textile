@@ -1,0 +1,110 @@
+---
+layout: post
+title: Implementing a star rating widget using jQuery
+---
+
+h3. {{ page.title }}
+
+p(meta). 15 Dec 2010
+
+<div class="post_payload">
+I decided to implemented a jQuery based star rating widget for fun: <a href="/code/stars/index.html">http://www.trnscofi.in/code/stars/index.html</a>
+
+The code is available at my github account: <a href="https://github.com/gautamc/star_rating">https://github.com/gautamc/star_rating</a>. The code you see hosted on this site was git submoduled from this github repo ( http://book.git-scm.com/5_submodules.html ).
+
+The CSS classes, that render the three possible states for the stars: dark, half glow, full glow, are located in the file: <a href="https://github.com/gautamc/star_rating/blob/master/styles/stars.css">https://github.com/gautamc/star_rating/blob/master/styles/stars.css</a>.
+The three possible states of a star are all part of a single image. The class classes use the background-position css directive to show a relevant subpart of the bigger image, depending on the kind of state that a star must be in.
+
+The star image with the 3 different states:
+<img src="/code/stars/styles/star_images/rating_stars.png" />
+
+The css class that use background-position to display a subpart of the above image:
+<pre>
+.rating_full {
+    background-image: url('/code/stars/styles/star_images/rating_stars.png');
+    width: 14px;
+    height: 13px;
+    background-position: 0% 0%;
+    clear: none;
+    float: left;
+}
+
+.rating_half {
+    background-image: url('/code/stars/styles/star_images/rating_stars.png');
+    width: 14px;
+    height: 13px;
+    background-position: 0% 45%;
+    clear: none;
+    float: left;
+}
+
+.rating_empty {
+    background-image: url('/code/stars/styles/star_images/rating_stars.png');
+    width: 14px;
+    height: 13px;
+    background-position: 0% 93%;
+    clear: none;
+    float: left;
+}
+</pre>
+
+
+The javascript implementation that implements the logic that sets/updates the rating star css classes is located in the file: <a href="https://github.com/gautamc/star_rating/blob/master/js/stars.js">https://github.com/gautamc/star_rating/blob/master/js/stars.js</a>
+
+To create a star rating widget, we need to create a ratings div, and initialize the ratings object based on this div.
+A ratings div has two components, the stars themselves and a textual description of the rating.
+
+<pre>
+
+  <div id="rating1" style="width: 210px;">
+    <div id="ratings" style="float: right;">
+      <div id="star1" class="rating_full"></div>
+      <div id="star2" class="rating_full"></div>
+      <div id="star3" class="rating_full"></div>
+      <div id="star4" class="rating_full"></div>
+      <div id="star5" class="rating_full"></div>
+    </div>
+    <div id="slider" style="width: 130px; margin-top: 4px;"></div>
+    <br />
+    <div id="rating_desc">
+      Improvement desired
+    </div>
+  </div>
+
+  $(document).ready(function() {
+    var rating_widget1 = new RatingWidget("rating1");
+  });
+
+</pre>
+
+
+The implementation of the RatingWidget is essentially a javacript function, which due to javascript's prototypal nature can also double up as a way to implement objects.
+By encapsulating all the logic for rendering the rating widget within an object, we can have different rating widgets running off the same code, but namespaced under their own div ids.
+
+The RatingWidget object, looks for the slider div located inside its container div and intializes a jquery slider on it. 
+<pre>
+    $( "#" + elem_id + " #slider" ).slider({
+        //slider callbacks and initialization params go here
+        //Setup these callback/params such that every time user drags the slider the stars to be displayed are calculated and rendered
+        slide: function(event, ui) { the logic goes here },
+        change: function(event, ui) { the logic goes here },
+        min: 1,
+        max: 5,
+        step: 0.5
+    });
+</pre>
+
+The logic implemented within the `slide` and `change` functions themselves is pretty simple. Everytime, the user drags the slider, these callbacks get as an argument a float point value between 1 and 5 (params min/max) which represents the location of the slider. The code in the the callbacks, finds out the nearest mulitple of 0.5 for this slider position and converts this value to the corresponding css class and and rating description text.
+
+<pre>
+     // ui.value --> a floating point value between 1 and 5; rating --> the nearest multiple of 0.5
+     var rating = 0.5 * Math.round(ui.value / 0.5);
+     // given the above rating, what should be the set of css classes assigned to the star divs?
+     var classes = rating2css(rating);
+     // given the above rating, what is its textual description  (good, bad, ugly.. :-p )
+     rating2txt(rating)
+</pre>
+
+These two methods, rating2css & rating2txt, are also encapsulated with in RatingWidget.
+
+</div>
