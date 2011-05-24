@@ -1,0 +1,56 @@
+---
+layout: post
+title: My Android Development Steps
+---
+
+h3. {{ page.title }}
+
+p(meta). 12 Oct 2010
+
+<div class="post_payload">
+
+While programming on an android application, there are set of commands that I use repetitively. The tasks performed via these commands range from the creation of a new emulator device to the viewing of the log for this device while running the application on it. Since I use emacs and the shell for all my development tasks I figured I'd list all the commands I use so that its there for me refer to quickly.
+
+Detailed documentation for all of these commands can be found in the <a href="http://developer.android.com/guide/developing/tools/index.html">Android SDK dev guide's Developing -> Tools section</a>. Infact, the dev guide is also located in your local android-sdk installation's docs/ sub-directory.
+
+With respect to the steps themselves, they are pretty straight-forward. We use ant as the build tool which runs the commands to complie our java code into the dex bytecode that can be executed by android's Dalvik virtual machine. This code is packaged(and signed) into a apk file that can be deployed on an android device.
+
+We can create/list/modify multiple android emulator devices via the android command.
+We can start an emulator device via the emulator command.
+The <a href="http://developer.android.com/guide/developing/tools/adb.html">adb, Android Debug Bridge</a>, is a client server program that allows us to interact and manage an android powered device or an android emulator. It is via the adb that I see the contents of the log file for the emulator device on which I run my application.
+Finally, telnet allows us to send certain messages, that can simulate real world events, to our emulator.
+
+Hence, before starting to code on my android app, I would first open a shell for listing the available android virtual devices. I might have to create a AVD if none were created before. When deciding to create a new AVD we can list the available target system images to choose from. The <a href="http://developer.android.com/guide/developing/tools/android.html">documentation of the android command</a> has a listing of all the available options.:
+
+* $ android list avd
+* $ android list targets
+* $ android create avd -n HTC_TATTO -t 4 -p ~/java/android_apps/avds/ --force
+
+Once the an AVD has been created I can start it. I like to have the device's root shell. I also like to see the kernel messages. Via the root shell we can explore the running android OS in detail. Once the emulator has started, we can see it listed in the output of the `adb devices`. adb logcat is the same as tailing the log for the system.
+
+* $ emulator -shell -show-kernel -avd HTC_TATTO
+* $ adb devices
+  List of devices attached 
+  emulator-5554   device
+
+* $ adb logcat  
+  
+After this we start coding our app and build/deploy it.
+
+* $ android create project --target 4 --name LocateBus --path ~/java/LocateBus --activity LocateBus --package in.trnscofi.LocateBus
+* $ ant clean
+* $ ant compile
+* $ ant release
+* $ ant install
+
+While testing our app on the emulator we can simulate certain signals/events via telnet. The port number that we have to telnet to can be obtained from the the output of `adb devices` shown above. For example, below I connected to the emulator and set the the current latitude and longitude. For more information see <a href="http://developer.android.com/guide/developing/devices/emulator.html#console">Using the Emulator Console</a>.
+
+* $ telnet localhost 5554
+  Trying 127.0.0.1...
+  Connected to localhost.
+  Escape character is '^]'.
+  Android Console: type 'help' for a list of commands
+  OK
+  geo fix -121.45356 46.51119 4392
+
+</div>
