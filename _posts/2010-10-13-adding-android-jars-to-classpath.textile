@@ -1,0 +1,29 @@
+---
+layout: post
+title: Quickly adding all Android .jar files to classpath
+---
+
+h3. {{ page.title }}
+
+p(meta). 12 Oct 2010
+
+<div class="post_payload">
+
+While coding on an android app, I sometimes like to run javap on a class name. Howevever, in order for this to work I need all the android jar files in the classpath environment variable. To quickly do this I use the following commands:
+
+* $ find ~/java/android-sdk-linux_86/ -name '*.jar' | while read; do echo 'export CLASSPATH=$CLASSPATH:'$REPLY; done > /tmp/set_classpath.sh
+
+On my laptop the I've got the android sdk installed in: ~/java/android-sdk-linux_86/. Hence, I want to find and add all the jar files under this directory to the classpath. In order to do this I use the find command, and use a little bash looping and IO redirection to create a file which exports the classpath.
+
+I can then source this file on the shell and run javap!
+
+* $ . /tmp/set_classpath.sh
+* $ javap android.app.Activity
+Compiled from "Activity.java"
+public class android.app.Activity extends android.view.ContextThemeWrapper implements android.view.LayoutInflater$Factory,android.view.Window$Callback,android.view.KeyEvent$Callback,android.view.View$OnCreateContextMenuListener,android.content.ComponentCallbacks{
+    public static final int RESULT_CANCELED;
+    public static final int RESULT_OK;
+    public static final int RESULT_FIRST_USER;
+
+
+</div>
