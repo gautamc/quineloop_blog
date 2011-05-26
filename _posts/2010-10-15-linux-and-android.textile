@@ -9,7 +9,7 @@ p(meta). 15 Oct 2010
 
 <div class="post_payload">
 
-Given the android is based on the the Linux 2.6 kernel I had tried to figure out how much the android was similar to Linux in terms of process management, user management, file system etc.
+Given that the android is based on Linux 2.6 kernel I had tried to figure out how much the android was similar to Linux in terms of process management, user management, file system etc.
 
 In order to do this I had, first, tried to get a shell on my HTC Tattoo. I noticed that I had to pick and install one from the android market place. I installed an app named "Terminal Emulator (On Android App Market)":https://market.android.com/details?id=jackpal.androidterm.
 
