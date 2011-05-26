@@ -5,7 +5,7 @@ title: Quickly adding all Android .jar files to classpath
 
 h3. {{ page.title }}
 
-p(meta). 12 Oct 2010
+p(meta). 13 Oct 2010
 
 <div class="post_payload">
 

@@ -1,0 +1,90 @@
+---
+layout: post
+title: Linux and Android
+---
+
+h3. {{ page.title }}
+
+p(meta). 15 Oct 2010
+
+<div class="post_payload">
+
+Given the android is based on the the Linux 2.6 kernel I had tried to figure out how much the android was similar to Linux in terms of process management, user management, file system etc.
+
+In order to do this I had, first, tried to get a shell on my HTC Tattoo. I noticed that I had to pick and install one from the android market place. I installed an app named "Terminal Emulator (On Android App Market)":https://market.android.com/details?id=jackpal.androidterm.
+
+With the app installed, I was able to run commands like ls, cd, ps etc. While there is a root user, trying a su root was not allowed (access denied). After googling around a bit I learnt that on the device itself we can't su as root because applications are restricted from accessing su. In case I wanted my terminal emulator app to get root access I would need to replace the su executable file. While there are loads of webpages which described how to do this, I wasn't sure if I wanted to replace my su executable file with a one downloaded from the net. I would prefer to build this custom "rooted" su executable file myself.
+
+Eventually, I started to use the "adb shell to investigate my phone":/2010/10/14/connecting-real-phone-via-adb.html.
+
+*User and process management:*
+
+* While checking out the output of ps and reading up about android process management I learnt that unlike linux, the android approach involves running each application under its own user.
+
+* That means, no two user applications will be owned by the same user (well, not quite true in all cases - there were multiple applications owned by root and shell).
+
+* This sounded like an elegant and simple approach in which android protects and limits each application - using Linux's mulituser management model on a mobile device, which in any case would have only one user using it.
+
+* While two different applications can be made to share a user id, the android security system requires both the apps to be signed by the same developer.
+
+* I found that the "Security and Permissions":http://developer.android.com/guide/topics/security/security.html section of the developer guide explains these concepts quite well.
+
+* While in the GNU/linux world we don't have a well defined/standardized system of "de-constructing" an application into its compnonents (screen, backgroud processes etc), android infact does view an application as a collection of well defined components.
+
+* What might be a screen is called an Activity. A Service essentially represent logic that might drive activities but which does not require the user's active attention. In adddtion there are providers and receivers. Briefly put, we could say that these two components allow us to implement interactions, between applications/components, as illustrated in the provider/consumer design pattern.
+
+* I feel that due to this well defined "application sub-component system" android is able to easily manage the switching of applications. In android, it is easy to have an application which has its components run in different processes. By taking this approach android is able to provide to us the "activity stack":http://developer.android.com/guide/topics/fundamentals/tasks-and-back-stack.html. Doing something similar on a GNU/Linux system would require us to take care of all the forking of the process and the IPC between then. 
+
+*File system:*
+
+* while ext3 is a popular file system used with linux, android uses "yaffs2":http://www.yaffs.net/yaffs-direct-user-guide which is a file system designed for flash memory chips.
+
+$ mount
+mount
+rootfs / rootfs ro 0 0
+tmpfs /dev tmpfs rw,mode=755 0 0
+devpts /dev/pts devpts rw,mode=600 0 0
+proc /proc proc rw 0 0
+sysfs /sys sysfs rw 0 0
+tmpfs /sqlite_stmt_journals tmpfs rw,size=4096k 0 0
+/dev/block/mtdblock3 /system yaffs2 ro 0 0
+/dev/block/mtdblock5 /data yaffs2 rw,nosuid,nodev 0 0
+/dev/block/mtdblock4 /cache yaffs2 rw,nosuid,nodev 0 0
+
+rootfs and tmpfs are simple RAM based filesystems that are present in the Linux world too. Both are special instances of ramfs (i.e rootfs can not be unmounted). /devpts /proc and sysfs are also very similar to any linux 2.6 installation you'd see. Infact we can cat the files in /proc to learn more about the phone.
+
+$ cat /proc/yaffs
+cat /proc/yaffs
+YAFFS built:Sep 29 2009 18:07:44
+$Id$
+$Id$
+
+*Device 0 "system"*
+startBlock......... 0
+endBlock........... 1199
+totalBytesPerChunk. 2048
+....
+*isYaffs2........... 1*
+inbandTags......... 0
+
+*Device 1 "userdata"*
+startBlock......... 0
+endBlock........... 1320
+totalBytesPerChunk. 2048
+....
+*isYaffs2........... 1*
+inbandTags......... 0
+
+*Device 2 "cache"*
+startBlock......... 0
+endBlock........... 1199
+totalBytesPerChunk. 2048
+....
+*isYaffs2........... 1*
+inbandTags......... 0
+
+So, finally we can indeed see that Android is Linux, but not quite so. No wonder the linux kernel team and the android team had a difference of opinion when it came to merging some of android's code in to liunx :-p...
+
+- May the source be with gnu!
+
+</div>

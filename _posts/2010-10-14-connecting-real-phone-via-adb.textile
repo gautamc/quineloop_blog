@@ -1,0 +1,79 @@
+---
+layout: post
+title: Connecting to a real phone via ADB
+---
+
+h3. {{ page.title }}
+
+p(meta). 14 Oct 2010
+
+<div class="post_payload">
+
+When trying to connect to my HTC Tatto's shell via adb, I saw adb was able to detect my phone when I connected it to my debian laptop's USB port. However, adb would hit a "no permissions" error when I tried to actually do anything more useful with the device. Checking dmesg, showed that the USB connection via the phone was working without any problem.
+
+$ dmesg
+[13770.552032] usb 5-2: new high speed USB device using ehci_hcd and address 2
+[13770.697082] usb 5-2: New USB device found, idVendor=0bb4, idProduct=0c02
+[13770.697086] usb 5-2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[13770.697089] usb 5-2: Product: Android Phone
+[13770.697092] usb 5-2: Manufacturer: HTC
+[13770.697094] usb 5-2: SerialNumber: HT9A5N500260
+[13770.697920] usb 5-2: configuration #1 chosen from 1 choice
+[13770.983427] Initializing USB Mass Storage driver...
+[13770.984879] scsi2 : SCSI emulation for USB Mass Storage devices
+[13770.985990] usbcore: registered new interface driver usb-storage
+[13770.985994] USB Mass Storage support registered.
+[13770.992041] usb-storage: device found at 2
+[13770.992045] usb-storage: waiting for device to settle before scanning
+[13775.993248] usb-storage: device scan complete
+<b>[13775.995233] scsi 2:0:0:0: Direct-Access     HTC      Android Phone    0100 PQ: 0 ANSI: 2</b>
+[13775.998623] sd 2:0:0:0: Attached scsi generic sg2 type 0
+[13776.005084] sd 2:0:0:0: [sdb] 3862528 512-byte logical blocks: (1.97 GB/1.84 GiB)
+[13776.007069] sd 2:0:0:0: [sdb] Write Protect is off
+[13776.007073] sd 2:0:0:0: [sdb] Mode Sense: 03 00 00 00
+[13776.007076] sd 2:0:0:0: [sdb] Assuming drive cache: write through
+[13776.014319] sd 2:0:0:0: [sdb] Assuming drive cache: write through
+[13776.014324]  sdb: sdb1
+[13776.026464] sd 2:0:0:0: [sdb] Assuming drive cache: write through
+[13776.026470] sd 2:0:0:0: [sdb] Attached SCSI removable disk
+[13776.673376] FAT: utf8 is not a recommended IO charset for FAT filesystems, filesystem will be case sensitive!
+[65078.214073] usb 5-2: USB disconnect, address 2
+
+$ adb devices
+.* daemon not running. starting it now on port 5037 *
+.* daemon started successfully *
+List of devices attached 
+????????????	no permissions
+
+$ adb usb
+error: insufficient permissions for device
+
+Evetually, I saw that restarting the adb server as root enabled adb to access the phone without any permissioning issues:
+
+$ su root
+$ adb kill-server
+$ adb start-server
+daemon not running. starting it now on port 5037 *
+daemon started successfully *
+$ adb devices
+List of devices attached 
+HT9A5N500260   device
+
+$ adb shell
+$$ su -
+su: permission denied
+
+However, when I tried to su root on my HTC Tattoo via adb shell, I saw that I still got the permission denied message. Additionaly, I saw that an attempt to restart the adbd daemon with root permissions yielded the following message:
+
+$ adb root
+adbd cannot run as root in production builds
+
+After some googling I read somewhere that android 1.5 and higher allow su root access in two cases:
+* when the user is root itself
+* when the application is the shell. This means adb would allow me su as root since adb uses the shell. (I reckon, the Terminal Emulator is not a real shell. Its just an app written to look like one.)
+
+Hence, I figured that, most probably, if I had a dev phone I might have had no problem being root. Since my HTC Tattoo isn't a dev phone all ways to get root have been blocked.
+
+The only way to get root in the case seems to "root it". This involves replacing the su executable file with a custom build file that does not enforce this restriction.
+
+</div>
