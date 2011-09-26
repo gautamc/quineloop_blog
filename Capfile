@@ -5,7 +5,7 @@ set :port, ""
 role :web, ""
 
 task :deploy_blog, :roles => :web do
-  run "cd /home/trnscofi/sites/ && git clone git://github.com/gautamc/trnscofi_blog trnscofi_struct"
+  run "cd /home/trnscofi/sites/ && git clone git://github.com/gautamc/quineloop_blog trnscofi_struct"
 end
 
 task :gen_blog, :roles => :web do
