@@ -8,7 +8,7 @@ h3. {{ page.title }}
 p(meta). 15 Dec 2010
 
 <div class="post_payload">
-I decided to implemented a jQuery based star rating widget for fun: <a href="/code/stars/index.html">http://www.trnscofi.in/code/stars/index.html</a>
+I decided to implemented a jQuery based star rating widget for fun: <a href="/code/stars/index.html">http://www.quineloop.com/code/stars/index.html</a>
 
 The code is available at my github account: <a href="https://github.com/gautamc/star_rating">https://github.com/gautamc/star_rating</a>. The code you see hosted on this site was git submoduled from this github repo ( http://book.git-scm.com/5_submodules.html ).
 

@@ -37,7 +37,7 @@ Once the an AVD has been created I can start it. I like to have the device's roo
   
 After this we start coding our app and build/deploy it.
 
-* $ android create project --target 4 --name LocateBus --path ~/java/LocateBus --activity LocateBus --package in.trnscofi.LocateBus
+* $ android create project --target 4 --name LocateBus --path ~/java/LocateBus --activity LocateBus --package com.quineloop.LocateBus
 * $ ant clean
 * $ ant compile
 * $ ant release

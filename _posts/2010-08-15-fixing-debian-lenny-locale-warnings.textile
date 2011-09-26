@@ -9,7 +9,7 @@ p(meta). 14 Aug 2010
 
 <div class="post_payload">
 
-While setting up the Debian lenny server on slicehost for the trnscofi experiments I noticed that after installing the locales package and performing the standard tasks for setting up the locales(section "Set locale" on this <a href="http://articles.slicehost.com/2009/3/31/debian-lenny-setup-page-2">slicehost page</a>), I was still get the locales warings:
+While setting up the Debian lenny server on slicehost for the Quineloop experiments I noticed that after installing the locales package and performing the standard tasks for setting up the locales(section "Set locale" on this <a href="http://articles.slicehost.com/2009/3/31/debian-lenny-setup-page-2">slicehost page</a>), I was still get the locales warings:
 
 <pre>
 can't set the locale; make sure $LC_* and $LANG are correct

@@ -22,7 +22,7 @@ After some hacking around and going through the existing scripts in the gimp reg
 
 <pre>
 $ cd ~/.gimp-x.y/scripts
-$ wget http://blog.trnscofi.in/code/sg-save-all-layers.scm .
+$ wget http://blog.quineloop.com/code/sg-save-all-layers.scm .
 $ gimp &
 </pre>
 
