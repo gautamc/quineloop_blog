@@ -1,4 +1,4 @@
-h1. blog.trnscofi.in - jekyll source site structure for the trnscofi blog
+h1. blog.quineloop.com - jekyll source site structure for the quineloop blog
 
 h1. License
 
