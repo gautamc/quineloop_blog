@@ -1,0 +1,290 @@
+---
+layout: post
+title: Building a liquid html5/canvas charting widget using jQuery and backbone.js - I
+---
+
+h3. {{ page.title }}
+
+p(meta). 01 Jan 2012
+
+<div class="post_payload">
+
+"ChartView":https://github.com/gautamc/ChartView is an unambitious attempt to build a HTML5/JS charting widget using jQuery and backbone.js.
+
+The goals I've set for this widget are:
+# It should be easy to render multiple charts on the same page.
+# It should be possible to set the height/width to a fixed pixel value or a percentage value.
+# It should display the grid and axes.
+# It should allow "overlay information bubbles" to be displayed.
+# It should work on tablet/smartphone browsers (android for sure - since I have access to android devices)
+
+The approach I figured I'd take can be summed up as follows:
+
+*Set the height & width of the canvas element in percentages and use jQuery as much as possible.*
+
+=> Implementing a liquid canvas element, takes more work then simply setting the elements height and width in percentages. Essentially, the canvas will scale depending on its height/width values and what was 1px before scaling, isn't 1px anymore. Initially, this might sound like something we want, but we quickly see that the plot lines we draw would not remain of constant width - they would thicken as height/width values (in %) increased. Hence, the only way out is to set the height/width programmatically via javascript.
+
+=> Hence, given this requirement of setting the height/width programmatically via javascript, I figured the best way to achieve liquid charts was to leverage jQuery's "height()":http://api.jquery.com/height/ and "width()":http://api.jquery.com/width/ methods.
+
+This approach involves, programmatically creating a canvas element and appending it to a div - which I refer to as a "canvas_holder". In the markup, we can specifiy the height&width of the "canvas_holder" div either in percentages or fixed pixels.
+
+For example, the chart rendered in the "canvas_holder" div given below spans across the entier width and height of its enclosing element:
+
+<pre>
+
+  <div id="canvas_holder_5" align="center" style="margin-top: 20px; width:100%; height:100%;">
+  </div>
+
+</pre>
+
+A fixed width chart could be rendered via the following markup:
+
+<pre>
+
+  <div id="canvas_holder_4" align="center" style="margin-top: 20px; width:600px; height:300px;">
+  </div>
+
+</pre>
+
+If we wanted to use a liquid grid style layout and render a multi-column chart placement, we could do something like this:
+
+<pre>
+
+  <div style="float: left; clear: none; width: 45%;">
+    <div id="canvas_holder_1" align="center" style="height:50%;">
+    </div>
+  </div>
+
+  <div style="float: right; clear: none; width:45%;">
+    <div id="canvas_holder_2" align="center" style="height:50%;">
+    </div>
+  </div>
+
+</pre>
+
+Essentially, the markup listed above doesn't explicitly set the width of the canvas_holder div. Because the two canvas_holders are positioned via their enclosing divs, the canvas_holder's width is inherited from its respective enclosing div - jQuery's height() and width() methods take care figuring out the width in pixels and the chart widget uses this information to build the the actual canvas element inside the "canvas_holder" div.
+
+*Encapsulate the widget as a backbone.js view object.*
+
+=> After defining the markup required for rendering the chart, we next intialize the chart this way:
+
+<pre>
+
+  var chart_view_1 = new ChartView({id:"canvas_holder_1"});
+  chart_view_1.render(); // Draw's that chart
+  chart_view_1.reset(); // Reset's the chart so that it can be redrawn
+
+</pre>
+
+=> "ChartView":https://github.com/gautamc/ChartView/blob/master/static/js/chart.js, is a backbone.js view object. Its constructor would eventually accpect multiple arguments that will enable us to control how/what the chart renders. For now, the JS object that is passed to the ChartView constructor needs to have one key/value pair - for specifiying the id of the canvas_holder div.
+
+=> Personally, for me the most interesting part is the programming that actually renders the chart based on the input data/series. This, intresting part is all inside ChartView. The input data would be implemented via a backbone.js model - something I will be doing in the coming days.
+
+The two major concepts/details that I've figured out while implementing this present version of ChartView are:
+a) Drawing the axes and the plot line based on the range of input data
+b) Scaling the X & Y axes so that they fit the input data in the most optimal way.
+
+Since, these details involve a minor amount of math, I figured I will describe them in a different blog post. I am sure these details are trivial for programmers who've already worked on charting libraries and such. I am finding that figuring these minor "math details" is enabling me a better programmer :-)
+
+*Cross Browser compatibility*
+
+=> For now, I am aiming to make the widget follow the html5 canvas standard. I am not particularly bothered about IE8 support. I aim to first concentrate on the widget object's elegance and depend on jQuery for Browser compatibility as much as possible. Hence, for now I check the widget in Firefox and Chrome. Once, the object is functionally, I will work backwards to fix/address compatibility issues with other browsers.
+
+*An Example*
+
+<div id="canvas_holder_4" align="center" style="margin-top: 20px; width:600px; height:300px;">
+</div>
+<br />
+<a href="#" id="draw_4">Draw Chart</a> | <a href="#" id="reset_4">Reset Chart</a>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript">
+</script>
+<script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.6/underscore-min.js"></script>
+<script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.3.3/backbone-min.js"></script>
+<script type="text/javascript">
+var ChartView = Backbone.View.extend({
+    
+    root_elem_id: "",
+    canvas_ref: "",
+    height: null,
+    width: null,
+    
+    initialize: function(args){
+	this.root_elem_id = args["id"];
+	
+	var root_elem = $("#" + this.root_elem_id);
+	var canvas_elem = document.createElement("canvas");
+	canvas_elem.style.zIndex = 0;
+	$(root_elem).append(canvas_elem);
+	this.canvas_ref = $("#" + this.root_elem_id + " canvas");
+	this.canvas_ref = this.canvas_ref[0];
+	
+	_.bindAll(this, 'render');
+    },
+    
+    render: function(){
+	
+	var chart_obj = this;
+	
+	var doc_height = $(document).height();
+	var doc_width = $(document).width();
+	var root_elem = $("#" + this.root_elem_id);
+	
+	this.canvas_ref.width = $(root_elem).width();
+	this.canvas_ref.height = $(root_elem).height();
+	this.width = this.canvas_ref.width;
+	this.height = this.canvas_ref.height;
+		
+	if( this.canvas_ref.getContext ){
+	    
+	    var ctx = this.canvas_ref.getContext('2d');
+	    /*this.canvas_ref.addEventListener("click", function(e){
+		var point = chart_obj.getAbsCursorPosition(e);
+		$(root_elem).append(chart_obj.bubble(point));
+	    }, false);*/
+	    
+	    var cp = new Array(
+		174.20, 195.65, 195.25, 192.45, 194.05, 186.30, 190.95, 210.50, 214.40,
+		209.80, 220.65, 217.50, 216.65, 219.95, 215.60, 216.80, 214.90, 227.15,
+		231.80, 226.35, 229.00, 230.05, 228.30, 230.70, 229.65, 228.00, 220.25,
+		202.50, 208.35, 217.40, 222.60, 222.75, 215.45, 213.95, 208.35, 200.00,
+		198.95, 198.05, 174.15, 181.30, 171.75, 157.10, 164.45, 156.85, 165.85,
+		167.10, 169.05, 174.55, 166.45, 170.05, 168.45, 173.00, 181.55, 184.65,
+		187.50, 186.05, 179.80, 177.95, 178.75, 180.00, 170.50, 169.70, 171.15,
+		168.55, 171.65, 172.20, 179.45, 179.70, 189.60, 197.00, 189.00, 192.55,
+		194.60, 202.45, 198.35, 194.90, 195.35, 191.80, 187.15, 171.65, 172.35,
+		169.65, 166.75, 162.35, 166.05, 164.10, 165.05, 167.00, 165.60, 168.10,
+		171.75, 174.30, 173.25, 171.85, 165.60, 163.65, 169.90, 166.30, 165.20,
+		160.60, 158.70
+	    );
+	    
+	    /*cp = new Array(
+	      174.20, 195.65, 195.25, 192.45, 194.05, 186.30, 190.95, 210.50, 214.40,
+	      209.80, 220.65, 217.50, 216.65, 219.95, 215.60, 216.80, 214.90, 227.15
+	      );
+	      
+	      cp = new Array(
+	      174.20, 195.65, 195.25, 192.45, 194.05, 186.30, 190.95, 210.50, 214.40,
+	      209.80, 231.80
+	      );
+	      
+	      cp = new Array(
+	      174.20, 195.65, 195.25, 192.45, 194.05, 186.30, 190.95, 210.50, 214.40,
+	      209.80
+	      );*/
+	    
+	    var max_y_val = Math.ceil(Math.max.apply(Math, cp));
+	    var min_y_val = Math.floor(Math.min.apply(Math, cp));
+	    var total_entries = cp.length;
+	    
+	    var x_tick_span = Math.floor(this.width/total_entries);
+	    var y_range_length = max_y_val-min_y_val;
+	    var y_tick_span = Math.floor(this.height/y_range_length);
+	    
+	    /*console.log(
+		min_y_val + " : " + max_y_val + " : " + total_entries + " : "
+		    + x_tick_span + " : " + y_tick_span, " : " + y_range_length
+	    );*/
+	    
+	    ctx.strokeStyle = '#0ee';
+	    ctx.lineWidth = 1;
+	    ctx.beginPath();
+	    for (i=0; i<total_entries; i++) {
+		ctx.moveTo((i*x_tick_span)-0.5, 0);
+		ctx.lineTo((i*x_tick_span)-0.5, this.height);
+	    }
+	    ctx.stroke();
+	    
+	    ctx.beginPath();
+	    for (i=0; i<y_range_length; i++) {
+		ctx.moveTo(0, (i*y_tick_span)-0.5);
+		ctx.lineTo(this.width, (i*y_tick_span)-0.5);
+	    }
+	    ctx.stroke();
+	    
+	    ctx.strokeStyle = '#000';
+	    ctx.lineWidth = 1
+	    ctx.linejoin = 'bevel';
+	    var x=x_tick_span;
+	    ctx.beginPath();
+	    for (y=1; y<=total_entries; y++){
+		/*console.log( cp[y-1] + " : " + max_y_val + " : " + (max_y_val-cp[y-1])*y_tick_span );*/
+		ctx.moveTo( (x-x_tick_span), ((max_y_val-cp[y-1])*y_tick_span) );
+		ctx.lineTo( x, ((max_y_val-cp[y])*y_tick_span) );
+		x+=x_tick_span;
+	    }
+	    ctx.stroke();
+
+	} else { alert("COULD NOT GET CONTEXT"); }
+    },
+    
+    getRelCursorPosition: function(e) {
+	var x;
+	var y;
+	
+	if (e.pageX != undefined && e.pageY != undefined) {
+	    x = e.pageX;
+	    y = e.pageY;
+	} else {
+	    x = e.clientX + document.body.scrollLeft +
+		document.documentElement.scrollLeft;
+	    y = e.clientY + document.body.scrollTop +
+		document.documentElement.scrollTop;
+	}
+	
+	canvas_holder_offset = $("#canvas_holder").offset();
+	x -= canvas_holder_offset.left;
+	y -= canvas_holder_offset.top;
+	
+	var point = [x, y];
+	return point;
+    },
+
+    getAbsCursorPosition: function(e) {
+	var x;
+	var y;
+	
+	if (e.pageX != undefined && e.pageY != undefined) {
+	    x = e.pageX;
+	    y = e.pageY;
+	} else {
+	    x = e.clientX + document.body.scrollLeft +
+		document.documentElement.scrollLeft;
+	    y = e.clientY + document.body.scrollTop +
+		document.documentElement.scrollTop;
+	}
+	var point = [x, y];
+	return point;
+    },
+
+    bubble: function(point) {
+	var bubble_code = "<div style='position:absolute; top:"
+	    + point[1] + "px; left:" + point[0] + "px; border: 1px solid blue; z-index: 1;'>"
+            + point[0] + " : " + point[1] + "<br />"
+            + "</div>";
+	return bubble_code;
+    },
+
+    reset: function() {
+	this.canvas_ref.width = this.canvas_ref.width;
+    }
+    
+});
+
+$(document).ready(function(){
+    var chart_view_4 = new ChartView({id:"canvas_holder_4"});
+    $("#draw_4").click(function(event){
+	event.preventDefault();
+	chart_view_4.render();
+	return false;
+    });
+    $("#reset_4").click(function(event){
+	event.preventDefault();
+	chart_view_4.reset();
+	return false;
+    });
+    chart_view_4.render();   
+});
+</script>
