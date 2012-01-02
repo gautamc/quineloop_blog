@@ -97,6 +97,10 @@ Since, these details involve a minor amount of math, I figured I will describe t
 <br />
 <a href="#" id="draw_4">Draw Chart</a> | <a href="#" id="reset_4">Reset Chart</a>
 
+<br />
+
+<a href="/code/charts/index.html"><b>URL to more Examples</b></a>
+
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript">
