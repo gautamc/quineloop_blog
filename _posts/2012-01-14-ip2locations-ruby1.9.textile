@@ -1,0 +1,66 @@
+---
+layout: post
+title: Making the ip2locations ruby library work with ruby 1.9
+---
+
+h3. {{ page.title }}
+
+p(meta). 14 Jan 2012
+
+<div class="post_payload">
+
+"ip2locations":http://www.ip2location.com/ is a service that we can use to get location information of a ip address. Essentially, ip2locations provides to a collection of data files to choose from and download that we query via a "C library":http://www.ip2location.com/c.aspx that they provide. There is a ruby library that provide a ruby interface to the this C library.
+
+While, trying to use this ruby library with ruby 1.9, I saw that the build generates more then a few warnings that look this:
+
+<pre>
+
+IP2Location.c
+IP2Location.c: In function 'rb_IP2Location_open':
+IP2Location.c:67: warning: passing argument 1 of 'IP2Location_open' makes pointer from integer without a cast
+IP2Location.c: In function 'rb_IP2Location_get_country_short':
+
+</pre>
+
+The IP2Location.so library does get built but if we try to use it, we see this see the following run time error:
+
+<pre>
+
+$ ruby sample_bsd.rb 
+------- IPv4 Sample --------
+ruby: symbol lookup error: ruby-1.9.2-p180/lib/ruby/site_ruby/1.9.1/i686-linux/IP2Location.so: undefined symbol: STR2CSTR
+
+</pre>
+
+This error happens because STR2CSTR is present in ruby 1.8, and was deprecated and removed from 1.9. For the code to run with ruby 1.9 we need to use StringValuePtr.
+
+<pre>
+
+< IP2LocationObj = IP2Location_open(STR2CSTR(dbFile));
+--
+> VALUE dbFile_for_cstr_cast = rb_str_dup(dbFile);
+> rb_str_modify(dbFile_for_cstr_cast);
+> IP2LocationObj = IP2Location_open(StringValuePtr(dbFile_for_cstr_cast));
+
+</pre>
+
+The "ip2location-ruby":https://github.com/gautamc/ip2location-ruby repository on github has these changes that enable this ruby library to be used with ruby 1.9:
+
+<pre>
+
+$ git clone git://github.com/gautamc/ip2location-ruby.git
+$ cd ip2location-ruby/
+$ ruby extconf.rb 
+checking for IP2Location_open() in -lIP2Location... yes
+creating Makefile
+$ make
+$ make install
+$ ruby sample_bsd.rb 
+
+</pre>
+
+STR2CSTR is a C macro wrapper for the function - <notextile>char *rb_str2cstr _((VALUE,long*));</notextile> - which is implemented in object.c. The first argument this function takes is a value of the type VALUE. VALUE is essentially used as a pointer to an object - and as we might guess from the name rb_str2cstr, the function is used to generate a "C string" from a "ruby string".
+
+STR2CSTR is a ruby 1.8 thing. With ruby 1.9, we should be using StringValuePtr. It takes a VALUE and return a C string. Before we pass the value to StringValuePtr, we must ensure that its mutable - hence the calls to rb_str_dup and rb_str_modify.
+
+</div>
