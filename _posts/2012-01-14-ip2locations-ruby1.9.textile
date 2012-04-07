@@ -9,7 +9,7 @@ p(meta). 14 Jan 2012
 
 <div class="post_payload">
 
-"ip2locations":http://www.ip2location.com/ is a service that we can use to get location information of a ip address. Essentially, ip2locations provides to a collection of data files to choose from and download that we query via a "C library":http://www.ip2location.com/c.aspx that they provide. There is a ruby library that provide a ruby interface to the this C library.
+"ip2locations":http://www.ip2location.com/ is a service used to get location information of a ip address. Essentially, ip2locations provides a collection of data files to choose from/download and query via a "C library":http://www.ip2location.com/c.aspx There is a ruby library that provide a ruby interface to the this C library.
 
 While, trying to use this ruby library with ruby 1.9, I saw that the build generates more then a few warnings that look this:
 
@@ -61,6 +61,6 @@ $ ruby sample_bsd.rb
 
 STR2CSTR is a C macro wrapper for the function - <notextile>char *rb_str2cstr _((VALUE,long*));</notextile> - which is implemented in object.c. The first argument this function takes is a value of the type VALUE. VALUE is essentially used as a pointer to an object - and as we might guess from the name rb_str2cstr, the function is used to generate a "C string" from a "ruby string".
 
-STR2CSTR is a ruby 1.8 thing. With ruby 1.9, we should be using StringValuePtr. It takes a VALUE and return a C string. Before we pass the value to StringValuePtr, we must ensure that its mutable - hence the calls to rb_str_dup and rb_str_modify.
+STR2CSTR is a ruby 1.8 thing. With ruby 1.9, we should be using StringValuePtr. It takes a VALUE and returns a C string. Before we pass the value to StringValuePtr, we must ensure that its mutable - hence the calls to rb_str_dup and rb_str_modify.
 
 </div>
