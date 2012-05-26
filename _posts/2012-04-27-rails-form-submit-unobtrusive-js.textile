@@ -79,12 +79,12 @@ The Details:
 		    return false;
 		}
 	    }
-	    $(elem).find("a.cancel_ajax_form").unbind("click").click(function(event){
-		event.preventDefault();
-		var validator = $(elem).validate();
-		validator.resetForm();
-	    });
 	);
+	$(elem).find("a.cancel_ajax_form").unbind("click").click(function(event){
+	    event.preventDefault();
+	    var validator = $(elem).validate();
+	    validator.resetForm();
+	});
     });
 </pre>
 
