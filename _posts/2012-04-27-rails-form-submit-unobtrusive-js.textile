@@ -1,0 +1,110 @@
+---
+layout: post
+title: A pattern for building unobtrusive ajaxed forms in rails3 using jQuery
+---
+
+h3. {{ page.title }}
+
+p(meta). 27 Apr 2012
+
+<div class="post_payload">
+
+The Aim:
+
+1. Setup a form that submits to an ajax request to a rails restful controller.
+2. Upon hitting the submit button, validate the form and if the form is valid then display a loading image.
+3. Hide the loading image after the form submission ajax request is complete.
+4. After the submit button is hit and before the ajax request complete, if the user clicks the button again then dont submit the form again.
+5. Provide a cancel button that will clear any validation messages.
+
+The Approach:
+
+1. In addition to activerecord validations, use jquery validation plugin.
+2. Perform an ajaxed submit for the form via the rails3 data-remote="true" approach.
+3. Use jquery's ajax events and form events to show/hide the loader image and "lock" the submit button when the ajax request is executing.
+
+The Details:
+
+1. We declare the form(s) in the markup and set the css class names so that we can use these class names to setup the JS event handlers. For example,
+=> The form element(s) have the class - ajax_form
+=> Each form's submit element has the class - save_ajax_form
+=> Each form's corresponding Cancel link has the class - cancel_ajax_form
+=> Each form's corresponding "loading" image/icon has the class - saving_ajax_form
+
+== The HTML ==
+<pre>
+
+&lt;form class="ajax_form" action="/RESTFUL/OBJ_ID/ACTION.js" method="post" data-remote="true"&gt;
+
+  &lt;input type="hidden" name="authenticity_token" value="&lt;%= form_authenticity_token %&gt;"&gt;
+  
+  &lt;!-- If this form submits to a put action --&gt;
+  &lt;input type="hidden" name="_method" value="put"&gt;
+  
+  &lt;!-- OTHER FIELDS GO HERE --&gt;
+  
+  &lt;input type="submit" class="btn save_ajax_form" value="Save"&gt;
+  &amp;nbsp; &lt;a href="#" class="cancel_ajax_form"&gt;Cancel&lt;/a&gt;
+  &lt;img src="/assets/spinner.gif" class="saving_ajax_form" style="display:none;margin-left:5px;" /&gt;
+  
+&lt;/form&gt;
+
+</pre>
+
+2. With the form(s) declared in the markup, we then use JS method chaining to use set the "ajax:before", "ajax:complete" and "submit" event handlers on the form(s). In addition, we use the jQuery <a href="http://api.jquery.com/category/traversing/">traversing</a> methods to locate the cancel link in the form and setup its click handler.
+
+3. In order to stop the form from being submitting multiple times in the event of the user clicking the submit button, when the ajax submit is currently executing, we can set a attribute on the from element that is used to keep of track of submission events that are currently executing. The attribute is "set" and "unset" in the "ajax:before" and "ajax:complete" events. The actual "submit" event uses the value of this attribute to either continue with a submit or exit from the event.
+
+4. If we have mulitple forms on the same page, we don't have setup multiple event handler javascript functions - one for each form.
+
+== The JavaScript ==
+<pre>
+    $.each($("ajax_form"), function(idx, elem){
+	$(elem).validate();
+	$(elem).bind(
+	    "ajax:before", function(){
+		$(this).attr('submitting', 1);
+		$( $(this).children("img.loading_ajax_form")[0] ).show();
+	    }
+	).bind(
+	    "ajax:complete", function(){
+		$(this).attr('submitting', 0);
+		$( $(this).children("img.loading_ajax_form")[0] ).hide();
+	    }
+	);
+	$(elem).bind(
+	    "submit", function(event){
+		if( $(this).attr('submitting') == 1 ) {
+		    event.preventDefault();
+		    return false;
+		}
+	    }
+	    $(elem).find("a.cancel_ajax_form").unbind("click").click(function(event){
+		event.preventDefault();
+		var validator = $(elem).validate();
+		validator.resetForm();
+	    });
+	);
+    });
+</pre>
+
+5. Finally, on the server side, we could simply return the content wrapped in javascript - which is kind of like the "code on demand" pattern. This way, we can push any kind of javascript from the server that the browser will evaulate and update the DOM.
+
+== On the server ==
+<pre>
+
+=> IN THE CONTROLLER ACTION
+def restful_action_name
+  FINDERS AND OTHER RUBY CODE
+  respond_to do |format|
+   format.html
+   format.js
+  end
+end
+
+=> IN THE .js.erb VIEW THAT IS RENDERED IN RESPONSE TO .JS REQUESTS ON THE ACTION
+$("#ID_OF_DOM_ELEMENT").html("<%= escape_javascript( render(:partial => '/VIEW_DIR/PARTIAL_NAME') ) -%>");
+
+</pre>
+
+</div>
