@@ -61,7 +61,7 @@ I started up with the new kernel and saw that the GPU hung error was still there
 <pre>
 
 $ grep -nri "Hangcheck timer elapsed... GPU hung" ~/src/linux-3.3.5/
-/home/mrblue/src/linux-3.3.5/drivers/gpu/drm/i915/i915_irq.c:1700:			DRM_ERROR("Hangcheck timer elapsed... GPU hung\n");
+/home/mrblue/src/linux-3.3.5/drivers/gpu/drm/i915/i915_irq.c:1700: DRM_ERROR("Hangcheck timer elapsed... GPU hung\n");
 m
 
 </pre>
