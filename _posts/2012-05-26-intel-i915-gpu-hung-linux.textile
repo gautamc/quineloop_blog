@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Fixing GPU hung error in GNU/Linux when running the intel i915 driver for Intel 945GM graphics chipset
+title: Fixing GPU hung error in GNU/Linux when running the intel i915 driver for<br />Intel 945GM graphics chipset
 ---
 
 h3. {{ page.title }}
