@@ -1,0 +1,104 @@
+---
+layout: post
+title: Fixing GPU hung error in GNU/Linux when running the intel i915 driver for Intel 945GM graphics chipset
+---
+
+h3. {{ page.title }}
+
+p(meta). 26 May 2012
+
+<div class="post_payload">
+
+I've got a Acer Aspire 3680 laptop which has a Intel Corporation Mobile 945GM/GMS/GME, 943/940GML Express Integrated Graphics Controller. I had been running Debian Lenny on the laptop and every thing was fine. Recently, I finally updated to Debian Squeeze - long overdue.
+
+<pre>
+
+$ lspci
+00:02.0 VGA compatible controller: Intel Corporation Mobile 945GM/GMS, 943/940GML Express Integrated Graphics Controller (rev 03)
+00:02.1 Display controller: Intel Corporation Mobile 945GM/GMS/GME, 943/940GML Express Integrated Graphics Controller (rev 03)
+
+</pre>
+
+So, after I upgraded the system (apt-get update -> apt-get upgrade -> apt-get dist-upgrade), every thing worked fine - until I fired up emacs. When I launched emacs, I saw that the emacs buffers would end up having their glyphs messed up when operations like pagination happened. The previous "screen's" content would still be there and overlap with the new screen's content - <a target="_blank" href="https://plus.google.com/photos/105831821277806582956/albums/5747114595563762897/5747114595507882450?authkey=CP21-d7dzvSM9QE">view this screenshot to see what I mean</a>.
+
+After going through the dmesg output I saw this:
+<pre>
+
+$ dmesg |grep "945"
+[    1.061306] agpgart-intel 0000:00:00.0: Intel 945GM Chipset
+
+$ dmesg |grep "i915"
+[   62.584083] [drm:i915_hangcheck_elapsed] *ERROR* Hangcheck timer elapsed... GPU hung
+[   62.584091] [drm] capturing error event; look for more information in /debug/dri/0/i915_error_state
+[   62.585843] [drm:i915_reset] *ERROR* Failed to reset chip.
+
+</pre>
+
+After some investigation, I also noticed that running `glxinfo` would crash my X server. A similar thing would when I ran the `glxgears`. Hence, I finally conclude that this issue was clearly related to OpenGL not being able to work with the chipset - Intel 945GM Chipset.
+
+i915 is the kernel module/driver for the Intel 945GM graphics chipset. After some googling around, I figured I might have to enable Kernel ModeSetting for this module. I did that by passing the kernel parameter via grub's menu.lst:
+<pre>
+
+title		Debian GNU/Linux, kernel 2.6.32-bpo.5-686
+root		(hd0,0)
+kernel		/boot/vmlinuz-2.6.32-bpo.5-686 root=UUID=...... ro quiet i915.modeset=1
+initrd		/boot/initrd.img-2.6.32-bpo.5-686
+
+</pre>
+
+However, this didn't solve the problem. While still attempting to figure out what to do next, I got an <a target="_blank" href="http://lwn.net/Articles/496154/">email alert</a> mentioning that the Linux Kernel 3.3.5 was out - so, I figured I might as well take this opportunity and build the latest kernel from source and see if I can get this issue fixed :-p
+
+So, I <a target="_blank" href="http://www.kernel.org/">downloaded the latest source tarball of the linux kernel</a>. I went through the README and did what I had to do for building the kernel. I selected the i915 driver in the menuconfig step. While I was at it I took the time to select the most opitmal configration for the kernel build - given all the information I had for my laptop. I typically do this, by getting information from commands like cat /proc/cpuinfo, lspci etc and then googling to get more information. Finally, I installed the kernel, <a target="_blank" href="http://kerneltrap.org/node/14995">created the initrd.img ramdisk file</a> and setup the grub menu.lst entries.
+
+<pre>
+make O=/home/mrblue/src/build/kernel menuconfig
+make O=/home/mrblue/src/build/kernel
+sudo make O=/home/mrblue/src/build/kernel modules_install install
+</pre>
+
+I started up with the new kernel and saw that the GPU hung error was still there in the dmesg output and glxinfo would still crash. Hence, I greped for the error message in the kernel source tree.
+
+<pre>
+
+$ grep -nri "Hangcheck timer elapsed... GPU hung" ~/src/linux-3.3.5/
+/home/mrblue/src/linux-3.3.5/drivers/gpu/drm/i915/i915_irq.c:1700:			DRM_ERROR("Hangcheck timer elapsed... GPU hung\n");
+m
+
+</pre>
+
+I opened i915_irq.c in my second favorite editor - vim and did a goto line 1700. Looking at code and the comments, I figure that that chip was hanging and the driver was trying to breaking the hang. However, attempting to trace the execution by trying to read the code was getting confusing. So, after about 30 mins and lots of greping for #define macros names and function names I figured I need to find a different way out.
+
+Then, I ended up greping for the other error msg I saw in the dmesg output: Failed to reset chip
+
+<pre>
+
+$ grep -nri "Failed to reset chip." ~/src/linux-3.3.5/drivers/gpu/drm/i915/
+src/linux-3.3.5/drivers/gpu/drm/i915/i915_drv.c:701: DRM_ERROR("Failed to reset chip.\n");
+
+</pre>
+
+I find i915_drv.c far more easy to work with and figure out. After a few printk calls and seeing what the value of INTEL_INFO(dev)->gen was for my chipset, I decided that I am going to add another case for my chipset:
+
+<pre>
+
+$ diff -u
+--- src/linux-3.3.5/drivers/gpu/drm/i915/i915_drv.c~	2012-05-07 03:13:46.000000000 -0400
++++ src/linux-3.3.5/drivers/gpu/drm/i915/i915_drv.c	2012-05-07 18:27:24.000000000 -0400
+@@ -689,6 +689,9 @@
+ 	case 4:
+ 		ret = i965_do_reset(dev, flags);
+ 		break;
++	case 3:
++		ret = i8xx_do_reset(dev, flags);
++		break;
+ 	case 2:
+ 		ret = i8xx_do_reset(dev, flags);
+ 		break;
+
+</pre>
+
+After rebuilding the kernel and installing the module via insmod, I saw that the reset operation didn't fail any more!
+With renewed anticipation I ran `glxinfo` and `glxgears` and saw that X wasn't crashing either!!
+Finally, lanuching emacs proved that all was well again...!!!
+
+</div>
