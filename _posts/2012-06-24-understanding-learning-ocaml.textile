@@ -1,0 +1,94 @@
+---
+layout: post
+title: Understanding and learning OCaml
+---
+
+h3. {{ page.title }}
+
+p(meta). 24 June 2012
+
+<div class="post_payload">
+
+When doing something new, like programming in a new language, I've always liked to write down my understanding of the concepts involved. Writing them down, almost like a written transcript of a talk that I had with myself helps me feel that my attempt to understand the concepts was complete, for the time being -:p
+
+OCaml is a language that I've been programming in for fun and I figured I'd write down my notes here:
+
+1) Note 1: OCaml is a statically typed programming language that has type inference abilities but does not automatically perform type casting for us.
+
+2. Note 2: OCaml is a functional programming language.
+
+There are multiple implications when a certain language is functional - the most basic one being functions are "first class citizens". When people are said to be "first class citizens", it means they have the right (and hence, ability) to do certain things (like pay taxes :-p) that non-citizens can not do. In programming universe if a construct is qualified as a "first class citizen" then it must mean that this construct can be passed around different contexts (like the ability to pass integers and other core/basic types from one function to another).
+
+In fact, in C we could create pointers to functions, pass them around as function aruguments and come up with a "C flavored" funcation programming style - but I think, "real" functional programmig languages makes this whole thing more intutive and easy to work with.
+
+Thinking about it, I guess if we didn't give importance to elegance and easy of use, even C (or for that matter any language supporting recursion and pointers/references to functions) could qualify as a funcational programming language - Its like when a person is in love he/she will automagically find his/her lover to be beautiful - even if that loved one was fat and ugly(and others told him/her that too) - they would only see beauty. If one really and absolutely loved writing code in C and loved one's personal "recursion & pointer to function" based functional programming style then it might not matter if others don't find this same code to be "intuitively" functional.
+
+But, in practical terms a functional program must be able to use techniques like currying, tail recursions and should implement "pure functions" that eliminate side effects (as much as possible) - These are concepts that I should be thinking about and writing about in more detail in the next few weeks as I delve deeper into OCaml programming.
+
+3. OCaml ints are 31bit (or 63bit - depending on the machine) because 1 bit is used by the garbage collector. Interestingly, unsigned ints are not a basic data type - but there is a way to have unsigned int values via the nativeint module - I need to check this out. The charater datatype of ocaml does not have native unicode support - but again, there are libraries/modules we could use to figure a way out if required. String data elements have a efficient internal representation that is independent of the character data type - another facet that is worth knowing more about.
+
+4. Debian had a ocaml package, but I decided to install ocaml from source - this way I could get version 3.12.1 and, more importantly, building stuff from source is fun. Its just easier to grep/find the source for testcases etc that serve as a quick refrence for syntax - things are ; versus ;;, multiline if/else statements etc are all there for us to see and figure out quickly.
+
+5. I've been reading the "ocaml-tutorial.org":http://mirror.ocamlcore.org/ocaml-tutorial.org/index.html and writing code while referring to the "reference manual":http://caml.inria.fr/pub/docs/manual-ocaml/index.html when required.
+
+<pre>
+$ cat first.ml
+(* Author: Gautam Chekuri - gautam.chekuri@gmail.com *)
+(*
+* First OCaml program
+*)
+
+let average a b =
+  (a +. b) /. 2.0;;
+(* let _ = Printf.printf "the average of %f and %f is %f\n" 2.0 3.0 (average 2.0 3.0);; *)
+
+let rec range a b =
+  if a > b
+  then(
+    Printf.printf "range complete\n";
+    [];
+   )
+  else(
+    Printf.printf "%d - %d\n" a b;
+    a :: range(a+1) b;
+   )
+;;
+let rng = range 1 10;;
+
+let print_as_str e =
+  Printf.printf "%d " e;
+;;
+List.map print_as_str rng;;
+Printf.printf "\n";;
+
+for i=0 to List.length rng - 1 do
+  Printf.printf "%d\n" i;
+done
+$ ocamlc first.ml -o first
+$ ./first
+1 - 10
+2 - 10
+3 - 10
+4 - 10
+5 - 10
+6 - 10
+7 - 10
+8 - 10
+9 - 10
+10 - 10
+range complete
+1 2 3 4 5 6 7 8 9 10 
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+$ 
+</pre>
+
+</div>
