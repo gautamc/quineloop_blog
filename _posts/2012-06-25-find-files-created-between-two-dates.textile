@@ -1,0 +1,83 @@
+---
+layout: post
+title: Finding files created between two dates
+---
+
+h3. {{ page.title }}
+
+p(meta). 28 June 2012
+
+<div class="post_payload">
+
+1. I recently had to get files that were uploaded to a Rails app during the last 4 days. Since, I was using paperclip for the file uploads, I was able to get the count/list of the uploaded files in no time via a simple sql query.
+
+2. Next, I needed to copy all these files from the directory where paperclip stored them, into a separate directory. This is where the find command was very useful:
+
+<pre>
+
+$ find uploaded_documents/ -type 'f' -ctime -4
+
+</pre>
+
+This command, will find all files under the uploaded_documents/ directory, which changed in the last 4 days.
+
+One important thing to remember in Unix - there is no creation time for files, only last modified/access time. "Quoting the Unix FAQ":http://fisica.ehu.es/ref/unixfaq.html#3.1
+
+<i>
+3.1) How do I find the creation time of a file?
+
+You can't - it isn't stored anywhere. Files have a last-modified time (shown by "ls -l"), a last-accessed time (shown by "ls -lu") and an inode change time (shown by "ls -lc"). The latter is often referred to as the "creation time" - even in some man pages - but that's wrong; it's also set by such operations as mv, ln, chmod, chown and chgrp. The man page for "stat(2)" discusses this.
+</i>
+
+We can think of it like this - every time we modify a file we are, essentially, destroying an older version and creating a new version. Hence, creation was itself a modify operation - it modified "nothingness" into an empty file :-p
+
+The ext4 filesystem, though, seems to provide a "birthtime" attribute for a file - but I am using ext3, so it wouldn't apply in this case.
+
+3. Anyway, now that I had the list of files that were created/modified during the last 4 days, I next, got the count of these files so that I could compare that number with the "select count(id)..where uploaded_at > ?" sql query I ran on the mysql table that paperclip uses:
+
+<pre>
+
+$ find uploaded_documents/ -type 'f' -ctime -4|wc -l
+
+</pre>
+
+I saw that the count matched up correctly, so now - I wanted to copy all these files to new directory so that I could tar.bz2 all the files:
+
+<pre>
+
+$ find uploaded_documents/ -type 'f' -ctime -4 -exec cp -pf {} ~/uploaded_documents-25jun-to-28jun-1540est/ \;
+
+$ tar -cf ~/uploaded_documents-25jun-to-28jun-1540est.tar ~/uploaded_documents-25jun-to-28jun-1540est/
+$ bzip2 ~/uploaded_documents-25jun-to-28jun-1540est.tar
+
+</pre>
+
+find's -exec option allows us to run a command for each matching file that find pulled out for us, wherein, we use the {} to refer to the matching file. Also, we have to escape the semi-colon that marks the end of the command argument we are passing to -exec.
+
+4. Finally, what if I wanted to get the list of file that were created/modified not in the last 'n' days, but between two given dates - say 25-Jun-2012 and 27-jun-2012 ?
+
+Find provides a way to do this too..
+
+<pre>
+
+$ touch /tmp/date_one -t [[CC]YY]MMDDhhmm[.ss]
+$ touch /tmp/date_two -t [[CC]YY]MMDDhhmm[.ss]
+$ find uploaded_documents/ -cnewer /tmp/date_one -and ! -cnewer /tmp/date_two
+
+</pre>
+
+Find allows us to specify expressions that will perform "and", "or", "not!" style checks.
+We can use this ability to tell find to get all files that had a changed time which is:
+a) newer than that of one given given file and
+b) not newer than that of another given file
+
+We can create these two "testcases" files via the touch command:
+
+<pre>
+$ touch /tmp/date_one -t 201206250000.00
+$ touch /tmp/date_two -t 201206280000.00
+$ find uploaded_documents/ -type 'f' -cnewer /tmp/date_one -and ! -cnewer /tmp/date_two |wc -l
+</pre>
+
+
+</div>
