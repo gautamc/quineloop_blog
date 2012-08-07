@@ -1,0 +1,51 @@
+---
+layout: post
+title: Installing Yesod framework on Debian Squeeze.
+---
+
+h3. {{ page.title }}
+
+p(meta). 01 July 2012
+
+<div class="post_payload">
+
+Haskell happens to be the coolest functional programming language around town :-p - and while learning OCaml I decided I wanted to learn and build something in Haskell.
+
+"Yesod":http://www.yesodweb.com/page/quickstart is a web framework written in Haskell. Hence, I decided I will install and start experimenting with it. I noticed that that the Debian packages seem to provide an older version of Haskell (6.X) and this would not work for Yesod.
+
+I got around this problem by following the step given below.
+ghc is the Glasgow Haskell Compiler. cabal is the package mangement system  - kind of like ruby and gem. Yesod is distributed as a cabal package.
+
+<pre>
+
+$ wget http://www.haskell.org/ghc/dist/7.4.2/ghc-7.4.2-i386-unknown-linux.tar.bz2
+$ tar -jxf ghc-7.4.2-i386-unknown-linux.tar.bz2
+$ mkdir $HOME/ghc
+$ ./configure --prefix=$HOME/ghc
+$ make install
+
+</pre>
+
+Add $HOME/ghc to $PATH. I do this by adding it to my ~/.bashrc and then sourcing it - . ~/.bashrc )
+
+<pre>
+
+$ wget http://hackage.haskell.org/packages/archive/cabal-install/0.14.0/cabal-install-0.14.0.tar.gz
+$ tar -zxf cabal-install-0.14.0.tar.gz
+$ chmod 755 ./bootstrap.sh
+$ ./bootstrap.sh
+
+</pre>
+
+Add $HOME/.cabal/bin to $PATH. I do this by adding it to my ~/.bashrc and then sourcing it - . ~/.bashrc )
+
+<pre>
+
+$ cabal update
+$ cabal install yesod
+$ yesod version
+yesod-core version:1.1.0
+
+</pre>
+
+</div>
