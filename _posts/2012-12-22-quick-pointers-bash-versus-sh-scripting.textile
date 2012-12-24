@@ -1,0 +1,238 @@
+---
+layout: post
+title: A few pointers for quickly remembering bash versus sh scripting.
+---
+
+h3. {{ page.title }}
+
+p(meta). 22 Dec 2012
+
+<div class="post_payload">
+
+<h4>Synopsis:</h4>
+
+When I write shell scripts I mostly choose between bash or sh. For most shell scripts I need to do a few things like:
+<i>1) Get command line arguments.</i>
+<i>2) Check for existence of files/directories and group different boolean conditions (some of which resulting from comparison of output of commands) in if/else clauses.</i>
+<i>3) Loop over a list/collection of elements.</i>
+<i>4) Put a simple check which will ensure that the script will not start executing when a previous run is still executing - this is useful, for example, when I run the script via a crontab schedule that runs every few minutes and where subsequent runs can sometimes pile up on each.</i>
+
+<h4>The Details:</h4>
+
+<strong>1) Get command line arguments:</strong>
+
+Both sh and bash support positional parameters. 
+Positional parameters are variable that are auto-magically created.
+These variables are named like $1, $2,.. $\d+ and each argument is named by its numeric position in argument list.
+$* and $@ are variables which store all the arguments and are useful when we want to work with them via a single list.
+
+<pre>
+
+$ cat /tmp/args.sh 
+echo "\$* =>" $*
+echo "\$@ =>" $@
+
+echo -n "for arg in \"\$*\" => "
+for arg in "$*"; do
+  echo $arg
+done
+
+echo "for arg in \$* => "
+for arg in $*; do
+  echo $arg
+done
+
+echo "for arg in \$@ => "
+for arg in $@; do
+  echo $arg
+done
+
+$ sh /tmp/args.sh 1 2 3
+$* => 1 2 3
+$@ => 1 2 3
+for arg in "$*" => 1 2 3
+for arg in $* => 
+1
+2
+3
+for arg in $@ => 
+1
+2
+3
+
+</pre>
+
+When working with individual positional parameters I often want to check if all them are non-empty.
+I check for this using the test expression syntax - [ boolean_expression1 -a boolean_expression2 ] - -a is read as "and"; -o is read as "or"; ! can be used for a negation.
+
+<pre>
+
+if [ -n "$1" -a -n "$2" -a -n "$3" ]; then
+else
+    echo "Usage: SCRIPT_NAME arg1 arg2 arg3"
+fi
+
+</pre>
+
+If we wanted named arguments then bash provides the "getopts internal function":http://tldp.org/LDP/abs/html/internal.html.
+If using sh we can use the /usr/bin/getopt command. 
+
+<strong>2) Check for existence of files/directories and group other boolean conditions in if/else clauses.</strong>
+
+When building multi-clause if/else conditions in languages like ruby we chain the clauses using && , ||.
+Bash allows a similar use of && and || by following a system of "Lists of expressions and compund commands". Essentially, (command) will execute the command in a subshell; ((expression)) will evaluated the expression; [[ expression ]] will evaluate the expression and return 0 (true) or 1 (false).
+
+Note that, in the unix process universe, a return value of non-zero means an error. Hence, 1 is false (error) and 0 is true (no-error).
+
+I've see some older versions of sh complain when I use the bash Lists & Compound Commands in a test expression. One place where sh might be used by default is the Kernel#system method in ruby (or the system builtin function in perl). Hence, this is one aspect that I'd always want to remember to avoid wasting timing thinking about what went wrong.
+
+sh can still use the form (command) to execute a command in a sub-shell. This means, if I want to group clauses/expressions using round brackets to enforce precedence in a sh script, I need to escape the round brackets. In sh, I'd use -a in palce of && and -o in-palce of ||.
+
+Consider the following example, where there are two directories: /tmp/src and /tmp/dest.
+The script wants to check if a particular file is present in /tmp/dest and is the same as the one in /tmp/src.
+To check if both the files are the same, the script compares the output of the sum command ($ man sum - checksum and count the blocks in a file). This command in invoked as "$(sum abs_path_to_file)".
+
+When Using sh compatible syntax:
+<pre>
+
+$ mkdir -p /tmp/dest
+$ mkdir -p /tmp/src
+$ touch /tmp/src/file_name
+$ cat test.sh
+archive_file_name="file_name"
+if [ \( ! -f /tmp/dest/$archive_file_name.tar.bz2 \) \
+     -o \( -f /tmp/dest/$archive_file_name.tar.bz2 \
+           -a "$(sum /tmp/dest/$archive_file_name.tar.bz2)" != \
+              "$(sum /tmp/src/$archive_file_name.tar.bz2)" \) \
+]; then
+  echo "Destination directory and source directory aren't in sync."
+else
+  echo "Destination directory and source directory are in sync."
+fi
+$ bash test.sh
+sum: /tmp/dest/file_name.tar.bz2: No such file or directory
+Destination directory and source directory aren't in sync.
+$ sh test.sh
+sum: /tmp/dest/file_name.tar.bz2: No such file or directory
+Destination directory and source directory aren't in sync.
+$
+
+</pre>
+Notice how, when using -a, the $(sum /abs_path/to_file) was executed even when the preceding clause was false. This is something that doesn't happen when we use bash - When Using bash compatible syntax:
+<pre>
+
+$ cat test.bash
+archive_file_name="file_name"
+if [[ (( ! -f /tmp/dest/$archive_file_name.tar.bz2 )) \
+     || (( -f /tmp/dest/$archive_file_name.tar.bz2 \
+           && "$(sum /tmp/dest/$archive_file_name.tar.bz2)" != \
+              "$(sum /tmp/src/$archive_file_name.tar.bz2)" )) \
+]]; then
+  echo "Destination directory and source directory aren't in sync."
+else
+  echo "Destination directory and source directory are in sync."
+fi
+$ sh test.sh
+/tmp/test.bash: 2: Syntax error: "(" unexpected (expecting ")")
+$ bash test.bash
+Destination directory and source directory aren't in sync.
+
+</pre>
+
+Yet another example using find:
+<pre>
+
+bash$ cat test.bash
+touch /tmp/date_one -t 201212220000.00
+touch /tmp/date_two -t 201212210000.00
+if [[ ( -d /tmp/test/ ) && ( -n "$(find /tmp/test/ -cnewer /tmp/date_one -and ! -cnewer /tmp/date_two -type 'f')" ) ]]; then
+echo 'Recent files found!'
+else
+echo 'No recent files found!'
+fi
+bash$ bash test.bash
+No recent files found!
+bash$ sh
+$ sh test.bash
+test.bash: 3: Syntax error: word unexpected (expecting ")")
+$ exit
+bash$
+bash$ cat test.sh
+touch /tmp/date_one -t 201212220000.00
+touch /tmp/date_two -t 201212210000.00
+if [ \( -d /tmp/test/ \) -a \( -n "$(find /tmp/test/ -cnewer /tmp/date_one -and ! -cnewer /tmp/date_two -type 'f')" \) ]; then
+echo 'Recent files found!'
+else
+echo 'No recent files found!'
+fi
+bash$ $ bash test.sh
+No recent files found!
+bash$ $ sh test.sh
+No recent files found!
+
+</pre>
+
+<strong>3) Loop over a list/collection of elements.</strong>
+
+The primary difference between bash and sh is the automatic creation of the loop variable by bash.
+
+Using sh:
+<pre>
+
+$ ls -1 |while read dir_element; do echo $dir_element; done
+atom.xml
+Capfile
+Capfile~
+CNAME
+code
+_config.yml
+css
+Gemfile
+Gemfile~
+Gemfile.lock
+images
+index.html
+index.html~
+_layouts
+_posts
+README.textile
+_site
+$ for number in 1 2 3 4; do echo 2*$number|bc; done
+2
+4
+6
+8
+
+</pre>
+
+For example, when using bash there is a $REPLY variable created automatically when we pipe the output to a while loop. We can create our own variable too:
+<pre>
+
+$ ls -1 |while read; do echo $REPLY; done
+$ ls -1 |while read dir_element; do echo $dir_element; done
+$ for file_name in $(ls -1); do echo $file_name; done
+atom.xml
+Capfile
+CNAME
+code
+
+</pre>
+
+<strong>4) Simple check to ensure subsequent runs will stop if a previous run is still in progress:</strong>
+
+This involves checking for and creating a lock file that is removed after the long running command is done running. For example, this is how I rsync files every few minutes from a remote machine, only if a previous rsync run isn't still running:
+<pre>
+
+if [ ! -f "/tmp/.SCRIPT_LOCK_FILE" ]; then
+  touch /tmp/.SCRIPT_LOCK_FILE
+  rsync -avz --rsh="ssh -p2424" USER@AAA.BBB.CCC.DDD:/remote/path/to/dir/ /local/path/to/dir/
+  rm /tmp/.SCRIPT_LOCK_FILE
+else
+  echo "rsync for AAA.BBB.CCC.DDD still running!"
+  send an email to yourself so that you can investigate and take corrective action
+fi
+
+</pre>
+However, as we can see clearly, this simplistic approach will not work if we ran the rsync command as a backgroud process.
+
+</div>
