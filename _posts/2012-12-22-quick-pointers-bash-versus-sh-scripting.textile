@@ -13,9 +13,9 @@ p(meta). 22 Dec 2012
 
 When I write shell scripts I mostly choose between bash or sh. For most shell scripts I need to do a few things like:
 <i>1) Get command line arguments.</i>
-<i>2) Check for existence of files/directories and group different boolean conditions (some of which resulting from comparison of output of commands) in if/else clauses.</i>
+<i>2) Check for existence of files/directories and group different boolean conditions (some of which result from comparison of output of commands) in if/else clauses.</i>
 <i>3) Loop over a list/collection of elements.</i>
-<i>4) Put a simple check which will ensure that the script will not start executing when a previous run is still executing - this is useful, for example, when I run the script via a crontab schedule that runs every few minutes and where subsequent runs can sometimes pile up on each.</i>
+<i>4) Put a simple check which will ensure that the script will not start executing when a previous run is still executing - this is useful, for example, when I run the script via a crontab schedule that runs every few minutes and where subsequent runs can sometimes pile up on each other.</i>
 
 <h4>The Details:</h4>
 
