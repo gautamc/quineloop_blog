@@ -1,0 +1,121 @@
+---
+layout: post
+title: An android app + Web app setup to push an incoming phone call's number to the browser.
+---
+
+h3. {{ page.title }}
+
+p(meta). 29 Dec 2012
+
+<div class="post_payload">
+
+<h4>Synopsis:</h4>
+
+1. Certain web applications, for example CRM systems, involve searching for a user/member profile based on a phone number. This typically happens when the user/member makes a phone call to the "support team".
+It can be time consuming for the "support team" to ask the user/member his/her phone number, key it into a user interface/form provided by the web application and pull up the relevant data/web page.
+
+2. To automate this process, we can use a simple android app that can listen for incoming phone calls and push the corresponding phone calls to the web app. The web app can then use a comet server to push events/notifications to the support team's browsers.
+
+3. To test this scenario, I put in place a toy implementation of an android app and a web application - as described below in "the details" section.
+
+For real applications, I could add a "login" workflow in the Android app. This way a support team member can use the same login credentials for both the web app and the Android app and every time they get a call from a  member/user/customer on their Android phone, the web application will automatically pull up the "profile" of that member/user/customer.
+
+<h4>The Details:</h4>
+
+3. As an illustration I implemented a "simple android app":https://github.com/gautamc/notifyoncall.
+
+=> This application first creates a PhoneStateListener subclass to wait for incoming phone calls, gets the phone number when incoming call arrives and submits it to a web server.
+
+=> On application startup, an instance of this PhoneStateListener subclass is registered with the TelephonyManager. Due to this the Android OS will send the required events to our PhoneStateListener subclass's object.
+
+=> "The PhoneStateListener subclass":https://github.com/gautamc/notifyoncall/blob/master/src/com/quineloop/NotifyOnCall/IncomingCallListener.java
+
+<pre>
+
+public class IncomingCallListener extends android.telephony.PhoneStateListener {
+
+    private NotifyOnCall myActivity;
+
+    public IncomingCallListener(NotifyOnCall myActivity){
+	this.myActivity = myActivity;
+    }
+    
+    @Override
+    public void onCallStateChanged(int state, String incomingCallNumber) {
+	
+	if( TelephonyManager.CALL_STATE_RINGING == state ) {
+	    System.out.println(" -- In the listener -- " + incomingCallNumber);
+	    myActivity.setIncomingNumber(incomingCallNumber);
+	    try {
+		this.executeHttpGet(incomingCallNumber);
+	    } catch(Exception e) {
+		e.printStackTrace();
+	    }
+	}
+    }
+
+    private void executeHttpGet(String phone_number) throws Exception {
+	HttpClient client = new DefaultHttpClient();
+	HttpGet request = new HttpGet();
+	request.setURI(new URI(myActivity.getNotifyURL() + phone_number));
+	HttpResponse response = client.execute(request);
+    }
+}
+
+</pre>
+
+=> "The TelephonyManager setup method in the main activity":https://github.com/gautamc/notifyoncall/blob/master/src/com/quineloop/NotifyOnCall/NotifyOnCall.java
+
+<pre>
+ 
+    private void setupIncomingCallListener() {
+	IncomingCallListener incomingCallListener = new IncomingCallListener(this);
+	TelephonyManager telephonyManager =
+	    (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+	telephonyManager.listen(
+	    incomingCallListener, IncomingCallListener.LISTEN_CALL_STATE
+	);
+    }
+
+</pre>
+
+4. On the web application, I setup a new action that implements the URL to which the android app submits the phone number.
+
+<pre>
+
+ def push
+   Notification.notify("Reciving Incoming Call from #{params[:phone]}")
+   render :text => "OK"
+ end
+
+</pre>
+
+The web application uses a faye server to push notifications to connected browsers.
+
+<pre>
+
+class Notification < ActiveRecord::Base
+
+  def self.notify(msg)
+    begin
+      uri = URI.parse("#{FAYE_PROTO}://#{FAYE_HOST}:6296/faye")
+      http = Net::HTTP.new(uri.host, uri.port)
+      if FAYE_PROTO == "https"
+        http.use_ssl = true
+      end
+
+      notification = {
+        :channel => "/notifications",
+        :data => msg
+      }
+      post_request = Net::HTTP::Post.new(uri.path)
+      post_request.set_form_data({:notification => notification.to_json})
+      post_response = http.request(post_request)
+    end
+  end
+
+end
+
+</pre>
+
+</div>
