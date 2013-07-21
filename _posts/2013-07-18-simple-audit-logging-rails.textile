@@ -1,0 +1,49 @@
+---
+layout: post
+title: Implementing Quick and simple "audit logging" in Rails.
+---
+
+h3. {{ page.title }}
+
+p(meta). 18 July 2013
+
+<div class="post_payload">
+
+<h4>Synopsis:</h4>
+
+1. I had been building a Rails 3.2.x intranet application for a health-care startup and I needed a quick way to track the actions that the different users were performing. This requirement could be thought of as being a "audit trail" of actions performed by logged in users.
+
+2. To get this requirement implemented quickly I decided to log the current_user.id for every request. Note the "Parameters:" and the "User:" log entries in the snippet below:
+
+<pre>
+
+$ grep -A 3 'Started PUT "/admissions/2323232/ipa_discharge"' log/production.log
+
+Started PUT "/admissions/2323232/ipa_discharge" for X.X.X.X at YYYY-MM-DD HH:HH:SS -0400
+Processing by AdmissionsController#ipa_discharge as JS
+  Parameters: {"patient_census_id"=>"1234", "auth_number"=>"212312313212312", "authenticity_token"=>"XXXXXXXX=YYYYYYYYYY", "ipa_discharge"=>"07/15/2013", "id"=>"2323232"}
+  User: {"current_user_id" => "1"}
+
+</pre>
+
+3. This approach worked reasonably well for this application because I implemented each user level action as its own controller action. This means, every time I saw that a controller action needed a if/else block to decide which active-record object or field to update, I would refactor the code into two different actions. This meant that there was reasonably good "mapping" between "business level (sub)operations" and controller actions.
+
+To check when and who performed a "business level (sub)operation" I can just grep for the appropriate action's restful url. grep's -A 3 switch will display the 3 lines after each matching line - this way I can see the current_user_id for that request.
+
+
+<h4>The Details:</h4>
+
+4. Since the application in this case uses the Devise for user management, I added a warden after_set_user callback in a initializer file:
+
+<pre>
+
+$ cat config/initializers/0_warden_callbacks.rb 
+Warden::Manager.after_set_user do |user, auth, opts|
+  Rails.logger.info("  User: {\"current_user_id\" => \"#{user.id}\"}")
+end
+
+</pre>
+
+5. To avoid interleaved logger messages in the log file due to "this issue":https://github.com/rails/rails/issues/5388 "I updated the after_fork block in my config/unicorn.rb similar to this":http://pivotallabs.com/how-to-split-up-rails-3-x-by-unicorn-workers/. This would ensure that each unicorn worker gets its own log file; the unicorn worker's process id is used to make the log file name unique.
+
+</div>
