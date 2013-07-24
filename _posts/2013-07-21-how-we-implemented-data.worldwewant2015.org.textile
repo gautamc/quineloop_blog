@@ -1,0 +1,158 @@
+---
+layout: post
+title: What I learnt when implementing the word cloud at "data.worldwewant2015.org":http://data.worldwewant2015.org/
+---
+
+h3. {{ page.title }}
+
+p(meta). 21 July 2013
+
+<div class="post_payload">
+
+<h4>Synopsis:</h4>
+
+1. I recently got to work with friends from Addo consulting on a project that allowed me write a some C++ code, in addition to the usual Ruby and JavaScript code that I write. We built this : "http://data.worldwewant2015.org/":http://data.worldwewant2015.org/
+
+2. The C++ code I wrote used "xapian":http://xapian.org/ and "boost":http://www.boost.org/ to implement two simple programs that are part of a simple file indexing and querying system. It was during the implementation of this system that I learnt something simple yet intresting and maybe at times inaccurate:
+
+(a) "Given a list of (word, frequency) pairs for a document, after we remove all pairs belonging to stop words, if we sort the list by the frequency we will most certainly see that words that have medium and low frequency result in a "that's intresting" effect."
+
+(b) Given a collection of documents, if we build a sorted list of (word, frequency) pairs for the entire collection, from the per document list described in (a), then we will most certainly see again that words that have medium and low frequency result in a bigger "that's intresting" effect."
+
+<h4>The Details:</h4>
+
+3. Briefly, the app's functionality can be summerized as follows:
+
+* It allows an admin to upload files of different types - .doc, .docx, .pdf, jpeg, etc.
+* The uploaded files can be assigned categories and tags.
+* If an uploaded file is of a format that might contain text - .doc, docx, pdf etc - the application converts these files into plain text and indexes all this text.
+* This "index of words" is then used to render a word cloud using d3.js which might provide a visual overview of the file's textual content (atleast, that was the idea).
+
+4. For converting .doc, docx and similar Office Suite format files to plain text we run libreoffice4.0 in headless mode on the server:
+
+<pre>
+
+/opt/libreoffice4.0/program/swriter --headless --convert-to html --outdir converted_docs/ uploads/MALAWI_2013_Feb_06_Malawi_post_2015_update_5feb2013.doc
+
+</pre>
+
+For indexing the text we use a slightly modified version of xapian's default "simpleindex.rb":https://github.com/ioquatix/xapian-core/blob/master/test/simpleindex.rb. This script reads the file to index from its stdin and creates/updates the index in db/xapian.
+
+<pre>
+
+cat docs_to_index/MALAWI_2013_Feb_06_Malawi_post_2015_update_5feb2013_2.txt | ruby script/indexer.rb db/xapian/
+
+</pre>
+
+To automate the execution of these commands after a file has been uploaded we run these commands via delayed_job.
+
+5. Simply put, a Xapian index stores the number of occurrences(frequency) of each word in a given document.
+
+a) In Xapian terminology we call this "frequency of each word in a given document" - "within-document frequency", or wdf.
+
+b) Xapian also stores the positions at which a word occured in a given document. This is called the word's within-document position(s) or wdp. This information allows us to use Xapian for implementing "proximity search" - i.e we can find which documents had certain words occurring within a certain distance of each other.
+
+6. Given this understanding of the data, we set out to obtain the list of words that would look most interesting in the word cloud. I first wrote a small program to list all (term, frequency) pairs for a given document as obtained from Xapian. I called this program `xapls_terms_for_doc`:
+
+<pre>
+
+$ cat xapls_terms_for_doc.cc
+#include <string>
+#include <boost/lexical_cast.hpp>
+#include <vector>
+#include <iostream>
+#include <xapian.h>
+
+using namespace std;
+
+int main(int argc, char **argv) {
+	string database_dir = "db/xapian/";
+	Xapian::Database db;
+	Xapian::docid doc_id;
+
+	if( argc < 2) {
+		return 1;
+	}
+	doc_id = boost::lexical_cast<int>(argv[1]);
+	db.add_database(Xapian::Database(database_dir));
+	Xapian::TermIterator ati = db.termlist_begin((Xapian::docid) doc_id);
+	while( ati != db.termlist_end((Xapian::docid) doc_id) ) {
+		cout << *ati << "," << ati.get_termfreq()
+			 << "," << ati.get_wdf() << "," << doc_id << "\n";
+		ati++;
+	}
+	return 0;
+}
+
+</pre>
+
+This what cout will be printing:
+*ati               => An indexed word.
+ati.get_termfreq() => The number of documents in the system that are indexed by this word.
+ati.get_wdf()      => The number of times this word was found in the given document.
+
+I then choose a single document as a candidate to query for and analyze manually.
+I pass id of this candidate document as an argument to xapls_terms_for_doc.
+
+Terms starting with Z (capital Z) or 0-9 have a special meaning in Xapian.
+Xapian converts every word being indexed to lowercase.
+Hence, in the command listed below we can be sure that we are not going to grep out "zebra".
+
+<pre>
+
+$ ./script/xapls_terms_for_doc 2|grep -E -v '^(Z|[0-9])'|wc -l
+688
+
+</pre>
+
+Here, we see that document_id 2 has 688 words/terms which were indexed and didn't start with a Z or a numeric digit.
+
+Next, I sort the output of xapls_terms_for_doc by the 3rd field. From this sorted list I will first get 10 terms from near the end of the list. After that I will get 10 terms from the middle of the list.
+
+<pre>
+
+$ ./script/xapls_terms_for_doc 2|grep -E -v '^(Z|[0-9])'|tr ',' ' '|sort -nk 3|tail -50|head -10
+youth 99 7 2
+across 59 8 2
+civil 108 8 2
+draft 27 8 2
+free 43 8 2
+notes 15 8 2
+particular 65 8 2
+rough 4 8 2
+employment 85 9 2
+knowledge 53 9 2
+
+
+$ ./script/xapls_terms_for_doc 2|grep -E -v '^(Z|[0-9])'|tr ',' ' '|sort -nk 3|tail -340|head -10
+terrorism 8 1 2
+there 105 1 2
+they 110 1 2
+things 26 1 2
+think 50 1 2
+this 127 1 2
+threat 11 1 2
+three 77 1 2
+together 52 1 2
+trafficking 10 1 2
+
+</pre>
+
+The more I did this with the different documents that were to be indexed at "data.worldwewant2015.org":http://data.worldwewant2015.org/, the more I felt that words from the "middle" had a high chance of begin "interesting".
+
+Therefore, we setup a stop word list that we filtered out from the indexed terms and implemented a json feed that was generated from the raw data that was obtained from a more intelligent implementation of xapls_terms_for_doc.cc
+
+
+Platform: Centos, ruby 1.9.2, nginx, unicorn, mysql, xapian, C++, jquery, backbone.js, bootstrap css and LibreOffice
+Ruby gems: mysql2, devise, remotipart, paperclip, nokogiri, delayed_job, xapian-ruby
+
+<pre>
+
+mrblue@quineloopcore:~/ruby/visualizer$ git log|grep "Author: "|sort -u
+Author: gautamc <gautam.chekuri@gmail.com>
+Author: kranthi <kranthi@addoinc.com>
+mrblue@darknetmaster:~/ruby/visualizer$
+
+</pre>
+
+</div>
