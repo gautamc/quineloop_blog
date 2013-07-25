@@ -13,12 +13,12 @@ layout: default
     {% for post in site.related_posts limit:3 %}
     <li>
       <div style="float: left;">
-	<span>{{ post.date | date_to_string }}</span> &raquo;
+        <span>{{ post.date | date_to_string }}</span> &raquo;
       </div>
       <div style="float: left;">
-	<a href="{{ post.url }}">
-	  {{ post.title }}
-	</a>
+        <a href="{{ post.url }}">
+          {{ post.title }}
+        </a>
       </div>
       <div style="clear: both;"></div>
     </li>
