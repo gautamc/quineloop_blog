@@ -1,215 +1,297 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
+<html lang="en">
   <head>
-    
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>quineloop's Blog</title>
+    <meta charset="utf-8">
+    <title>quineloop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Gautam Chekuri" />
+    <meta name="description" content="">
 
     <!-- syntax highlighting CSS -->
     <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
 
-    <!-- Homepage CSS -->
-    <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen, projection" />
-    <link rel="stylesheet" href="/css/ez-proto.css" type="text/css" media="screen, projection" />
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <style>
+      .entry { clear: both; }
+      .entry-elem { float: left; }
+      .right-col { border-left: 1px solid rgba(0, 0, 0, 0.15); height: 500px; }
+    </style>
 
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/bootstrap/js/html5shiv.js"></script>
+    <![endif]-->
   </head>
-  
+
   <body>
     
-    <!-- Layout 2 -->
-    <div class="ez-wr">
-      
-      <div class="ez-box header">
-	<img src="/images/quineloop_logo_small.png" style="float:right;" />
-	<h1>
-	  <a href="/" class="menu_link">Quineloop's Blog</a>
-	</h1>
-      </div>
+    <div class="container-fluid">
 
-      <div style="clear:both;"></div>
-      
-      <!-- Module 2A -->
-      <div class="ez-wr">
-	
-	<div class="ez-fl ez-negmr ez-75">
-	  
-	  <div class="ez-box">
-	    
-	    <h3>Blog Posts</h3>
-	    <ul class="posts">
-	      <li>
-
-		<div style="float: left;">
-		  <span>21 July 2013</span> &raquo;
-		</div>
-		<div style="float: left;">
-		  <a href="/2013/07/21/how-we-implemented-data.worldwewant2015.org.html">
-		    What I learnt when implementing the word cloud at data.worldwewant2015.org
-		  </a>
-		</div>
-		<div style="clear: both;"></div>
-
-		<div style="float: left;">
-		  <span>18 July 2013</span> &raquo;
-		</div>
-		<div style="float: left;">
-		  <a href="/2013/07/18/simple-audit-logging-rails.html">
-		    Implementing Quick and simple "audit logging" in Rails.
-		  </a>
-		</div>
-		<div style="clear: both;"></div>
-		<br />
-
-		<div style="float: left;">
-		  <span>29 Dec 2012</span> &raquo;
-		</div>
-		<div style="float: left;">
-		  <a href="/2012/12/29/android-to-webapp-phone-push-notification.html">
-		    An android app + Web app setup to push an incoming phone call's number to the browser.
-		  </a>
-		</div>
-		<div style="clear: both;"></div>
-
-		<div style="float: left;">
-		  <span>22 Dec 2012</span> &raquo;
-		</div>
-		<div style="float: left;">
-		  <a href="/2012/12/22/quick-pointers-bash-versus-sh-scripting.html">
-		    A few pointers for quickly remembering bash versus sh scripting.
-		  </a>
-		</div>
-		<div style="clear: both;"></div>
-		<br />
-		
-		<div style="float: left;">
-		  <span>01 July 2012</span> &raquo;
-		</div>
-		<div style="float: left;">
-		  <a href="/2012/07/01/install-haskell-cabal-yesod-debian-squeeze.html">
-		    Installing Yesod framework on Debian Squeeze.
-		  </a>
-		</div>
-		<div style="clear: both;"></div>
-		<br />
-
-		<div style="float: left;">
-		  <span>28 June 2012</span> &raquo;
-		</div>
-		<div style="float: left;">
-		  <a href="/2012/06/25/find-files-created-between-two-dates.html">
-		    Finding files created between two dates
-		  </a>
-		</div>
-		<div style="clear: both;"></div>
-		
-		<div style="float: left;">
-		  <span>24 June 2012</span> &raquo;
-		</div>
-		<div style="float: left;">
-		  <a href="/2012/06/24/understanding-learning-ocaml.html">
-		    Understanding and learning OCaml
-		  </a>
-		</div>
-		<div style="clear: both;"></div>
-		<br />
-
-		<div style="float: left;">
-		  <span>26 May 2012</span> &raquo;
-		</div>
-		<div style="float: left;">
-		  <a href="/2012/05/26/intel-i915-gpu-hung-linux.html">
-		    Fixing GPU hung error in GNU/Linux when running the intel i915 driver for<br />
-		    Intel 945GM graphics chipset
-		  </a>
-		</div>
-		<div style="clear: both;"></div>
-		<br />
-		
-		<span>27 Apr 2012</span> &raquo;
-		<a href="/2012/04/27/rails-form-submit-unobtrusive-js.html">
-		  A pattern for building unobtrusive ajax forms in rails3 using jQuery
-		</a>
-		<br /><br />
-		
-		<span>14 Jan 2012</span> &raquo;
-		<a href="/2012/01/14/ip2locations-ruby1.9.html">
-                  Making the ip2locations ruby library work with ruby 1.9
-		</a>
-		<br />
-
-		<span>01 Jan 2012</span> &raquo;
-		<a href="/2012/01/01/liquid_chart_using_canvas.html">
-		  Building a liquid html5/canvas charting widget using jQuery and backbone.js - I
-		</a>
-		<br /><br />
-		
-		<span>25 Dec 2010</span> &raquo;
-		<a href="/2010/12/25/jquery-star-rating.html">
-		  Implementing a star rating widget using jQuery
-		</a>
-		<br /><br />
-		
-		<span>15 Oct 2010</span> &raquo;
-		<a href="/2010/10/15/linux-and-android.html">Linux And Android</a>
-		<br />
-		<span>14 Oct 2010</span> &raquo;
-		<a href="/2010/10/14/connecting-real-phone-via-adb.html">Connecting to a real phone via ADB</a>
-		<br />
-		<span>13 Oct 2010</span> &raquo;
-		<a href="/2010/10/13/adding-android-jars-to-classpath.html">
-		  Quickly adding all android .jar files to classpath
-		</a>
-		<br />
-		<span>12 Oct 2010</span> &raquo;
-		<a href="/2010/10/12/android-development-steps.html">My Android Development Steps</a>
-		<br /><br />
-
-		<span>18 Aug 2010</span> &raquo;
-		<a href="/2010/08/18/ruby-digital-clock.html">Implementing a digital clock in ruby</a>
-		<br />
-		<span>17 Aug 2010</span> &raquo;
-		<a href="2010/08/17/extracting-layers-from-psd-gimp.html">
-		  gimp-image-get-layers - programming the Gimp to extract layers from a psd using scheme
-		</a>
-		<br />
-		<span>16 Aug 2010</span> &raquo;
-		<a href="/2010/08/16/genrating-strong-passwords.html">Genrating strong passwords on Debian lenny</a>
-		<br />
-		<span>15 Aug 2010</span> &raquo;
-		<a href="/2010/08/15/fixing-debian-lenny-locale-warnings.html">Fixing locale warnings on Debian lenny</a>
-		<br />
-		<span>14 Aug 2010</span> &raquo;
-		<a href="/2010/08/14/introducing-quineloop.html">Introducing Quineloop</a>
-		<br />
-	      </li>
-	    </ul>
-	    
-	  </div>
-	  
-	</div>
-	
-	<fieldset>
-	  <div class="ez-box">
-	    <i>About Me:</i><br />
-	    <p>
-              Gautam Chekuri<br />
-              gautam.chekuri at gmail dot com<br />
-	      <a href="http://github.com/gautamc">github.com/gautamc</a><br />
-	    </p>
-	  </div>
-	</fieldset>
-	
-      </div>
-      
-      <div class="ez-box footer">
-	<div style="padding-top: 20px;">
+      <div class="row-fluid">
+	<div class="span12">
+	  <img src="/images/quineloop_logo_small.png" style="float:right;" />
+	  <h1>
+	    <a href="/" class="menu_link">Quineloop</a>
+	  </h1>
+	  ['Gautam Chekuri', 'gautam.chekuri@gmail.com', 'http://github.com/gautamc']
 	</div>
       </div>
-      
+     
+      <div class="row-fluid">
+     
+	<div class="span8">
+	   
+	  <h3>Blog Posts</h3>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>21 July 2013</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2013/07/21/how-we-implemented-data.worldwewant2015.org.html">
+		What I learnt when implementing the word cloud at data.worldwewant2015.org
+	      </a>
+	    </div>
+	  </div>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>18 July 2013</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2013/07/18/simple-audit-logging-rails.html">
+		Implementing Quick and simple "audit logging" in Rails.
+	      </a>
+	    </div>
+	  </div>
+	  <br /><br />
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>29 Dec 2012</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2012/12/29/android-to-webapp-phone-push-notification.html">
+		An android app + Web app setup to push an incoming phone call's number to the browser.
+	      </a>
+	    </div>
+	  </div>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>22 Dec 2012</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2012/12/22/quick-pointers-bash-versus-sh-scripting.html">
+		A few pointers for quickly remembering bash versus sh scripting.
+	      </a>
+	    </div>
+	  </div>
+	  <br /><br />
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>01 July 2012</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2012/07/01/install-haskell-cabal-yesod-debian-squeeze.html">
+		Installing Yesod framework on Debian Squeeze.
+	      </a>
+	    </div>
+	  </div>
+	  <br /><br />
+	  
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>28 June 2012</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2012/06/25/find-files-created-between-two-dates.html">
+		Finding files created between two dates
+	      </a>
+	    </div>
+	  </div>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>24 June 2012</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2012/06/24/understanding-learning-ocaml.html">
+		Understanding and learning OCaml
+	      </a>
+	    </div>
+	  </div>
+	  <br /><br />
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>26 May 2012</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2012/05/26/intel-i915-gpu-hung-linux.html">
+		Fixing GPU hung error in GNU/Linux when running the intel i915 driver for<br />
+		Intel 945GM graphics chipset
+	      </a>
+	    </div>
+	  </div>
+	  <br /><br />
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>27 Apr 2012</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2012/04/27/rails-form-submit-unobtrusive-js.html">
+		A pattern for building unobtrusive ajax forms in rails3 using jQuery
+	      </a>
+	    </div>
+	  </div>
+	  <br /><br />
+	  
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>14 Jan 2012</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2012/01/14/ip2locations-ruby1.9.html">
+		Making the ip2locations ruby library work with ruby 1.9
+	      </a>
+	    </div>
+	  </div>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>01 Jan 2012</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2012/01/01/liquid_chart_using_canvas.html">
+		Building a liquid html5/canvas charting widget using jQuery and backbone.js - I
+	      </a>
+	    </div>
+	  </div>
+	  <br /><br />
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>25 Dec 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2010/12/25/jquery-star-rating.html">
+		Implementing a star rating widget using jQuery
+	      </a>
+	    </div>
+	  </div>
+	  <br /><br />
+		
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>15 Oct 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2010/10/15/linux-and-android.html">Linux And Android</a>
+	    </div>
+	  </div>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>14 Oct 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2010/10/14/connecting-real-phone-via-adb.html">
+		Connecting to a real phone via ADB
+	      </a>
+	    </div>
+	  </div>
+	  <br /><br />
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>13 Oct 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2010/10/13/adding-android-jars-to-classpath.html">
+		Quickly adding all android .jar files to classpath
+	      </a>
+	    </div>
+	  </div>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>12 Oct 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2010/10/12/android-development-steps.html">My Android Development Steps</a>
+	    </div>
+	  </div>
+	  <br /><br />
+	  
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>18 Aug 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2010/08/18/ruby-digital-clock.html">Implementing a digital clock in ruby</a>
+	    </div>
+	  </div>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>17 Aug 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="2010/08/17/extracting-layers-from-psd-gimp.html">
+		gimp-image-get-layers - programming the Gimp to extract layers from a psd using scheme
+	      </a>
+	    </div>
+	  </div>
+	  
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>16 Aug 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2010/08/16/genrating-strong-passwords.html">
+		Genrating strong passwords on Debian lenny
+	      </a>
+	    </div>
+	  </div>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>15 Aug 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2010/08/15/fixing-debian-lenny-locale-warnings.html">
+		Fixing locale warnings on Debian lenny
+	      </a>
+	    </div>
+	  </div>
+
+	  <div class="entry">
+	    <div class="entry-elem">
+	      <span>14 Aug 2010</span> &raquo;
+	    </div>
+	    <div class="entry-elem">
+	      <a href="/2010/08/14/introducing-quineloop.html">Introducing Quineloop</a>
+	    </div>
+	  </div>
+
+	</div>
+
+	<div class="span4 right-col">
+	</div>
+
+      </div>
+
+      <div class="row-fluid">
+	<div class="span12">
+	  <hr />
+	</div>
+      </div>
+
     </div>
-    
+
   </body>
 </html>

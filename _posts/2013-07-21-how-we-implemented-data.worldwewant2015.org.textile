@@ -1,6 +1,6 @@
 ---
 layout: post
-title: What I learnt when implementing the word cloud at "data.worldwewant2015.org":http://data.worldwewant2015.org/
+title: What I learnt when implementing the word cloud at data.worldwewant2015.org
 ---
 
 h3. {{ page.title }}
@@ -151,7 +151,7 @@ Ruby gems: mysql2, devise, remotipart, paperclip, nokogiri, delayed_job, xapian-
 mrblue@quineloopcore:~/ruby/visualizer$ git log|grep "Author: "|sort -u
 Author: gautamc <gautam.chekuri@gmail.com>
 Author: kranthi <kranthi@addoinc.com>
-mrblue@darknetmaster:~/ruby/visualizer$
+mrblue@quineloopcore:~/ruby/visualizer$
 
 </pre>
 
