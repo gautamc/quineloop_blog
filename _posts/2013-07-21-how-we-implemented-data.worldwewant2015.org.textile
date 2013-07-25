@@ -11,7 +11,7 @@ p(meta). 21 July 2013
 
 <h4>Synopsis:</h4>
 
-1. I recently got to work with friends from Addo consulting on a project that allowed me write a some C++ code, in addition to the usual Ruby and JavaScript code that I write. We built this : "http://data.worldwewant2015.org/":http://data.worldwewant2015.org/
+1. I recently got to work with friends from "Addo consulting":http://www.addoconsulting.com/ on a project that allowed me write a some C++ code, in addition to the usual Ruby and JavaScript code that I write. We built this : "http://data.worldwewant2015.org/":http://data.worldwewant2015.org/
 
 2. The C++ code I wrote used "xapian":http://xapian.org/ and "boost":http://www.boost.org/ to implement two simple programs that are part of a simple file indexing and querying system. It was during the implementation of this system that I learnt something simple yet intresting and maybe at times inaccurate:
 
