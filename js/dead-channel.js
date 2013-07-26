@@ -45,5 +45,5 @@ var quineloop = (function() {
 })()
 
 $(document).ready(function(){
-    var dead-channel = new quineloop.DeadChannel({ eid: "dead-channel" })
+    var dead_channel = new quineloop.DeadChannel({ eid: "dead-channel" })
 })
