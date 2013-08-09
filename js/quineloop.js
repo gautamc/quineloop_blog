@@ -31,7 +31,7 @@ var quineloop = (function() {
                     ctx.putImageData(img_data, x, y)
                 }
             }
-            
+            $("div#rendering-dead-channel").hide()
         }
 
         me.reset = function(){
@@ -90,6 +90,7 @@ var quineloop = (function() {
                     }
                 }
             }
+            $("div#rendering-mandelbrot").hide()
         }
 
         me.reset = function(){
