@@ -104,7 +104,7 @@ var quineloop = (function() {
     return { DeadChannel: DeadChannel, Mandelbrot: Mandelbrot }
 })()
 
-$(document).ready(function(){
+$(window).load(function(){
     var dead_channel = new quineloop.DeadChannel({ eid: "dead-channel" })
     var mandelbrot = new quineloop.Mandelbrot({ eid: "mandelbrot" })
 })
