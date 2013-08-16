@@ -1,0 +1,24 @@
+---
+layout: mandelbrot-post
+title: Rendering Mandelbrot Set using canvas and d3.js
+---
+
+h3. {{ page.title }}
+
+p(meta). 21 July 2013
+
+<div class="post_payload">
+
+<center>
+  <div id="rendering-mandelbrot" class="center">
+  <b>Rendering Mandelbrot set!</b>
+  </div>
+  <div id="mandelbrot">
+  </div>
+</center>
+
+<h4>Synopsis:</h4>
+
+<h4>The Details:</h4>
+
+</div>
