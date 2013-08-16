@@ -11,7 +11,7 @@ p(meta). 21 July 2013
 
 <center>
   <div id="rendering-mandelbrot" class="center">
-  <b>Rendering Mandelbrot set!</b>
+  <b>Rendering Mandelbrot set!</b> <img src="/images/spinner.gif" />
   </div>
   <div id="mandelbrot">
   </div>
