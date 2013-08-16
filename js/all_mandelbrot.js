@@ -84,7 +84,7 @@ this.__chart__=k,x.append("line"),x.append("text");var N=x.select("line"),q=_.se
                     window.setTimeout( render_segment(end_idx, segment_width, full_width), 0 )
                 }
             }
-            window.setTimeout( render_segment(0, Math.floor(me.width / 3), me.width), 0 )
+            window.setTimeout( render_segment(0, Math.floor(me.width / 3), me.width), 3000 )
         }
 
         me.reset = function(){
