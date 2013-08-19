@@ -62,7 +62,7 @@ this.__chart__=k,x.append("line"),x.append("text");var N=x.select("line"),q=_.se
         var init = function(args){
             me.args = args
             me.width = $("#"+args.eid).width()
-            me.height = me.width
+            me.height = me.width / 1.7
 
             canvas = document.getElementById(args.eid).appendChild(
                 document.createElement('canvas')

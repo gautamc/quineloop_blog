@@ -47,7 +47,7 @@ var quineloop = (function() {
         var init = function(args){
             me.args = args
             me.width = $("#"+args.eid).width()
-            me.height = me.width
+            me.height = me.width / 1.7
 
             canvas = document.getElementById(args.eid).appendChild(
                 document.createElement('canvas')
