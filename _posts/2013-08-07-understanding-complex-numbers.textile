@@ -1,0 +1,75 @@
+---
+layout: post
+title: Understanding Complex Numbers
+---
+
+h3. {{ page.title }}
+
+p(meta). 03 Nov 2015
+
+<div class="post_payload">
+
+  <p>
+    1. A complex number is a generalization derived from the concept of a number.
+  </p>
+
+  <h4>The concept of a number:</h4>
+
+  <p>
+    2. Given a set of things, we use numbers to count and order the things in this set. With numbers, we could tell how many things our set contains, call a certain thing the first and some other the last etc.
+  </p>
+
+  <p>
+    3. Each thing in our set can be represented by a number. Given a bag of apples, we can decide that Apple 1 is bigger than Apple 2. We can order and arrange the apples because every bag of apples gives "numberyness" to the apples in it: the property that allows things to be counted and arranged.
+  </p>
+
+  <p>
+    4. The number is not the apple, we don't eat the number; the number is an idea that allows us think about things in certain ways.
+  </p>
+
+  <h4>The generalization:</h4>
+
+  <p>
+    5. What if there was something, that could be represented (or thought about) better with a pair of numbers. And what if, these pairs of numbers had their own rules for addition,  multiplication etc - A pair of numbers that have their own " mathematics" which is slightly different from the mathematics of our everyday apple counting number.
+
+    If there are such things, we would assume they must be very different from the aforementioned apples.
+  </p>
+
+  <p>
+    6. English language definition:
+    <b>Complex</b> - <i>Consisting of many different and connected part.</i>
+  </p>
+
+  <h4>Details:</h4>
+
+  <p>
+    7. A complex number is just a pair of number. There are well defined methods which tell how to perform math operations on these pairs of numbers.
+  </p>
+
+  <p>
+    8. The two numbers that make up a complex number have names that we can call them with. The first is called Real and the other is called Imaginary. Both Real and Imaginary can do everything that we would want a normal apple counting number to do - but Imaginary 'has a twist in its story'.
+  </p>
+
+  <p>
+    9. While every real number is a multiple of 1, every imaginary number is said to be a multiple of i. The twist is that, i is defined as the square root or -1.Therefore, a complex number is a 
+
+    a + bi
+    i = <math><msqrt><mn>-1</mn></msqrt></math>
+  </p>
+
+<div>
+
+<script>
+  window.addEventListener(
+    'load', function(event) {
+       /* ["/js/all_complex_numbers.js"] */
+       ["/js/d3.v3.min.js", "/js/complex_numbers.js"].forEach(function(script_src_url) {
+         var script_element = window.document.createElement('script')
+         script_element.src = script_src_url
+         script_element.type = 'text/javascript'
+         script_element.async = true
+         window.document.body.appendChild(script_element)
+       })
+    }
+  )
+</script>

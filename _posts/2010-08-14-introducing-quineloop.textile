@@ -9,23 +9,31 @@ p(meta). 14 Aug 2010
 
 <div class="post_payload">
 
-Quineloop ( http://blog.quineloop.com/ ) has been bootstrapped and is on slicehost! I choose slicehost since it offered the most afforadable and flexible GNU/Linux server. For $20 (about 900 INR appx) a month, I get to have a debian lenny server where I can try out all my web experiments. Not a bad deal at all, my monthly mobile bill also adds up to a similar amount! Utility computing at its best, I'd say!
+  <p>
+    Quineloop ( http://blog.quineloop.com/ ) has been bootstrapped and is on [-slicehost-] [+Linode+]! I choose [-slicehost-] [+Linode+] since it offered the most afforadable and flexible GNU/Linux server. For $20 (about 900 INR appx) a month, I get to have a debian lenny server where I can try out all my web experiments. Not a bad deal at all, my monthly mobile bill also adds up to a similar amount! Utility computing at its best, I'd say!
+  <p>
 
-This Blog is published using <a href="http://github.com/mojombo">Tom Preston-Werner's</a> "blog-aware, static site generator" named <a href="http://github.com/mojombo/jekyll">jekyll</a>. Unlike, traditional database driven blogging engines, with jekyll I use <a href="http://github.com/gautamc/quineloop_blog">github</a> and Capistrano to store and deploy my blog posts. Jekyll takes care of processing and transforming the textile and liquid templates into a static website that can be deployed under nginx.
+  <p>
+    This Blog is published using <a href="http://github.com/mojombo">Tom Preston-Werner's</a> "blog-aware, static site generator" named <a href="http://github.com/mojombo/jekyll">jekyll</a>. Unlike, traditional database driven blogging engines, with jekyll I use <a href="http://github.com/gautamc/quineloop_blog">github</a> and Capistrano to store and deploy my blog posts. Jekyll takes care of processing and transforming the textile and liquid templates into a static website that can be deployed under nginx.
+  </p>
 
-Interstingly, jekyll provides ways to <a href="http://wiki.github.com/mojombo/jekyll/blog-migrations">migrate</a> existing WordPress, Movable Type, Typo 4+, TextPattern and Mephisto instance to their static site equivalents.
+  <p>
+    Interstingly, jekyll provides ways to <a href="http://wiki.github.com/mojombo/jekyll/blog-migrations">migrate</a> existing WordPress, Movable Type, Typo 4+, TextPattern and Mephisto instance to their static site equivalents.
+  </p>
 
-The workflow for adding a blog post looks something like this:
-* $ cd ~/quineloop_blog/
-* $ touch _posts/2010-08-14-introducing-quineloop.textile
-* # Open _posts/2010-08-14-introducing-quineloop.textile in emacs and edit it
-* $ jekyll
-* # Open index.html and add the index entry for the new blog post
-* $ jekyll --server
-* # Check if everything looks as planned at: http://127.0.0.1:4000
-* $ git add/commit/push
-* $ cap deploy_blog # Reuqired only for the first time
-* $ cap gen_blog # Required every time we want to edit/publish existing/new posts
-* # http://blog.quineloop.com/ has the lastest blog post deployed!
+  <p>
+    The workflow for adding a blog post looks something like this:
+  </p>
 
+  * $ cd ~/quineloop_blog/
+  * $ touch _posts/2010-08-14-introducing-quineloop.textile
+  * $ jekyll serve
+  * <notextile># Open index.html and add the index entry for the new blog post</notextile>
+  * <notextile># Open _posts/2010-08-14-introducing-quineloop.textile in emacs and edit it</notextile>
+  * <notextile># Check if everything looks as planned at: http://127.0.0.1:4000</notextile>
+  * $ git add/commit/push
+  * $ cap create # Reuqired only for the first time
+  * $ cap publish # Required every time we want to edit/publish existing/new posts
+  * <notextile># http://blog.quineloop.com/ has the lastest blog post deployed!</notextile>
+    
 </div>

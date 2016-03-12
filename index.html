@@ -18,6 +18,21 @@
       .right-col { border-left: 1px solid rgba(0, 0, 0, 0.15); }
       .right-row { margin-left: 5px; }
       .center { text-align: center; }
+      .light {
+        background-image: url('/images/light.gif');
+        background-repeat: no-repeat;
+        height: 250px;
+      }
+      .light-forever {
+        background-image: url("/images/light-forever.gif");
+        background-repeat: repeat-x;
+      }
+      .light-sm { display: none; }
+      @media (max-width: 768px) {
+        .light { display: none; }
+        .light-forever { display: none; }
+        .light-sm { display: block; }
+      }
     </style>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -70,7 +85,20 @@
               </a>
             </div>
           </div>
+
+          <!--
+          <div class="entry">
+            <div class="entry-elem">
+              <span>07 Aug 2013</span> &raquo;
+            </div>
+            <div class="entry-elem">
+              <a href="/2013/08/07/understanding-complex-numbers.html">
+                Understanding Complex Numbers
+              </a>
+            </div>
+          </div>
           <br /><br />
+          -->
 
           <div class="entry">
             <div class="entry-elem">
@@ -81,7 +109,7 @@
                 What I learnt when implementing the word cloud at data.worldwewant2015.org
               </a>
             </div>
-          </div>
+           </div>
 
           <div class="entry">
             <div class="entry-elem">
@@ -307,26 +335,84 @@
 
           <hr />
 
+          <div class="light-forever">
+            <div class="light"></div>
+          </div>
+          <tt>
+            <span style="font-size:90%">
+              (I didn't draw this picture, but I have it here because I like it.)
+            </span><br />
+          </tt>
+
         </div>
 
         <div class="span4 right-col">
+
           <div class="row right-row">
             <div id="rendering-dead-channel" class="center">
               <b>Rendering dead channel!</b> <img src="/images/spinner.gif" />
             </div>
             <div id="dead-channel">
             </div>
-            <tt>The sky above the port was the color of television, tuned to a dead channel.</tt>
+            <tt>
+              The sky above the port was the color of television, tuned to a dead channel.
+              <a
+                 href="https://github.com/gautamc/quineloop_blog/blob/master/js/quineloop.js"
+                 target="_blank">
+                code on github
+              </a>
+            </tt>
           </div>
+
           <hr />
+
           <div class="row right-row">
             <div id="rendering-mandelbrot" class="center">
               <b>Rendering Mandelbrot Set!</b> <img src="/images/spinner.gif" />
             </div>
             <div id="mandelbrot">
             </div>
-            <tt>Rendering on &lt;canvas&gt; using escape time algorithm</tt>
+            <tt>
+              Rendering on &lt;canvas&gt; using escape time algorithm
+              <a
+                 href="https://github.com/gautamc/quineloop_blog/blob/master/js/quineloop.js"
+                 target="_blank">
+                code on github
+              </a>
+            </tt>
           </div>
+
+          <hr />
+
+          <div class="row right-row">
+            <div id="rendering-lissajous" class="center">
+              <b>Rendering Swarm!</b> <img src="/images/spinner.gif" />
+            </div>
+            <div id="lissajous">
+            </div>
+            <tt>
+              10 rectangle swarm: animated to move on pseudorandom Lissajous curve paths in a &lt;canvas&gt;
+              <a
+                 href="https://github.com/gautamc/quineloop_blog/blob/master/js/quineloop.js"
+                 target="_blank">
+                code on github
+              </a>
+            </tt>
+          </div>
+
+          <hr />
+
+          <div class="row right-row light-sm">
+            <div class="center">
+            </div>
+            <img src="/images/light.gif" />
+            <tt>
+              <span style="font-size:90%">
+                (I didn't draw this picture, but I have it here because I like it.)
+              </span><br />
+            </tt>
+          </div>
+
         </div>
 
       </div>
@@ -339,10 +425,10 @@
 
     </div>
 
-    <!--<script src="/js/jquery-2.0.3.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/js/d3.v3.min.js"></script>
-    <script src="/js/quineloop.js"></script>-->
-    <script src="/js/all.js"></script>
+    <script src="/js/quineloop.js"></script>
+    <!-- <script src="/js/all.js"></script> -->
   </body>
 </html>

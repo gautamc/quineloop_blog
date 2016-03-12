@@ -1,5 +1,5 @@
 ---
-layout: mandelbrot-post
+layout: post
 title: Rendering Mandelbrot Set using canvas and d3.js
 ---
 
@@ -9,16 +9,31 @@ p(meta). 21 July 2013
 
 <div class="post_payload">
 
-<center>
-  <div id="rendering-mandelbrot" class="center">
-  <b>Rendering Mandelbrot set!</b> <img src="/images/spinner.gif" />
-  </div>
-  <div id="mandelbrot">
-  </div>
-</center>
+  <center>
+    <div id="rendering-mandelbrot" class="center">
+      <b>Rendering Mandelbrot set!</b> <img src="/images/spinner.gif" />
+    </div>
+    <div id="mandelbrot">
+    </div>
+  </center>
 
-<h4>Synopsis:</h4>
+  <h4>Synopsis:</h4>
 
-<h4>The Details:</h4>
+  <h4>The Details:</h4>
 
 </div>
+
+<script>
+  window.addEventListener(
+    'load', function(event) {
+       /* ["/js/all_mandelbrot.js"] */
+       ["/js/d3.v3.min.js", "/js/mandelbrot.js"].forEach(function(script_src_url) {
+         var script_element = window.document.createElement('script')
+         script_element.src = script_src_url
+         script_element.type = 'text/javascript'
+         script_element.async = true
+         window.document.body.appendChild(script_element)
+       })
+    }
+  )
+</script>
