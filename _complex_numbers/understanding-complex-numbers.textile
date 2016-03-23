@@ -1,0 +1,331 @@
+---
+layout: post
+title: Understanding Complex Numbers
+---
+
+h3. {{ page.title }}
+
+<i>Initially drafted in 2013; updated in 2014 & March 2016</i>
+
+<div class="post_payload">
+
+  <div class='para'>
+    <div class='idx'>1.</div>
+    <div class='x'>
+      <span class='idx-sm'>1.</span>
+      A complex number has the form a + bi where a and b are defined as two real numbers and <math><mrow><msup><mi>i</mi><mn>2</mn></msup><mo>=</mo><mn>-1</mn></mrow></math>.<br />
+      The `+` between `a` and `bi` does not mean that we are somehow going to add `a` into `bi`.<br />
+      The `+` is simply a convention - we must look at the complex number as pair of two numbers `a` and `bi`.<br />
+      The plot given below is the familiar complex plane. Each point on the plane is a complex number.<br />
+      <style>
+        .axis {
+          font-size: 10px;
+          stroke-opacity:0.2;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+        .domain {
+          fill: none;
+          stroke: #000;
+        }
+        .overlay {
+          fill: none;
+          pointer-events: all;
+        }
+      </style>
+      <h4 id="selected-complex-number"></h4>
+      <div class="complex-plane"></div>
+      The following notes are my attempt to deconstruct and understand the complex number.<br />
+      <br />      
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>2.</div>
+    <div class='x'>
+      <span class='idx-sm'>2.</span>
+      A complex number is a generalization derived from the concept of a number.
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <h4>The concept of a number:</h4>
+
+  <div class='para'>
+    <div class='idx'>3.</div>
+    <div class='x'>
+      <span class='idx-sm'>3.</span>
+      Given a set of things, we use numbers to count and order the things.<br />
+      With the use of numbers, we could tell how many things our set contains, call a certain thing the first and some other the last.
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>4.</div>
+    <div class='x'>
+      <span class='idx-sm'>4.</span>
+      Each thing in our set can be represented by a number.<br />
+      Given a bag of apples, we can decide that Apple 1 is bigger than Apple 2.<br />
+      Being in a bag - real or hypothetical - allows the apples to be counted and arranged relative to other apples in the bag.<br />
+      It is not that the apple by itself was countable - the bag had something to do with enabling this ability in our mind.
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>5.</div>
+    <div class='x'>
+      <span class='idx-sm'>5.</span>
+      The number is not the apple, we don't eat the number; the number is an idea that allows us think about things in certain ways.
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <h4>The generalization:</h4>
+
+  <div class='para'>
+    <div class='idx'>6.</div>
+    <div class='x'>
+      <span class='idx-sm'>6.</span>
+      What if there was something, that could be represented (or thought about) better with a pair of numbers.<br />
+      And what if, these pairs of numbers had their own rules for addition and multiplication.<br />
+      - A pair of numbers with their own " mathematics", slightly differing from the mathematics of our everyday apple counting number.<br />
+      If there are such things, we would assume them to be very different from the aforementioned apples.
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>7.</div>
+    <div class='x'>
+      <span class='idx-sm'>7.</span>
+      English language definition:
+      <b>Complex</b> - <i>Consisting of many different and connected parts.</i>
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <h4>Two numbers, paired to act as one:</h4>
+
+  <div class='para'>
+    <div class='idx'>8.</div>
+    <div class='x'>
+      <span class='idx-sm'>8.</span>
+      'Complex Number' is the name given to a pair of numbers.<br />
+      There are well defined methods for performing math operations on such pairs of numbers;<br />
+      - afterall, what good are numbers - complex or otherwise - if there isn't a straightforward way to add them.<br />
+      <br />
+      But before everything else, one must ask the following questions:<br />
+      <br />
+      <i>What is it about these two numbers, that we want to pair them and treat the pair as a number?</i><br />
+      <i>Do these two numbers in the pair have special abilities?</i><br />
+      <i>Are they both alike - in terms of what each of them can do; or, are they very different from each other?</i><br />
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <h4>Both alike in abilities, but differing in one fundamental property - their multiplicative identity</h4>
+
+  <div class='para'>
+    <div class='idx'>9.</div>
+    <div class='x'>
+      <span class='idx-sm'>9.</span>
+      One might ask what the phrase - "abilities of a number" means. Such a question is asking what it means to be a number.<br />
+      Simply put, addition & multiplication are two abilities that a number has.<br />
+      Multiplication is repeated addition.<br />
+      Therefore, one can conclude that the ability to add is what makes the number - if I can add then I can also multiply.<br />
+      From the notion of addition we can derive what it means to be greater and smaller when comparing two numbers.<br />
+      All of these abilities, as noted previously, allow us to count and order things.<br />
+      We could deconstruct and analyze what it means to be a number in more detail, but for now let us move forward without doing so.<br />
+      <br />
+      The two numbers that are paired to create a complex number are named the <b>Real</b> part and the <b>Imaginary</b> part.<br />
+      Real and Imaginary can each be used for counting and ordering the aforementioned apples<br />
+      - everything that can be done with a Real number can also be done with an Imaginary number.<br />
+      In this sense, they are alike.
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>10.</div>
+    <div class='x'>
+      <span class='idx-sm'>10.</span>
+      While similar, there is one fundamental difference between a Real number and an Imaginary number.<br />
+      <br />
+      To appreciate the nature of this difference we must first understand the 'multiplicative identity'.<br />
+      'Multiplicative Identity' is the name given to a number that when multiplied by does not result in any change.<br />
+      Simply put, 1 is the Multiplicative Identity that we are familiar with:<br />
+      <math>
+        <mrow>
+          <mn>5</mn>
+          <mo>&times;</mo>
+          <mn>1</mn>
+          <mo>=</mo>
+          <mn>5</mn>
+        </mrow>
+      </math>
+      <br />
+      <math>
+        <mrow>
+          <mn>76</mn>
+          <mo>&times;</mo>
+          <mn>1</mn>
+          <mo>=</mo>
+          <mn>76</mn>
+        </mrow>
+      </math>
+      <br />
+      <br />
+      The Multiplicative Identity for every Real number is 1. Hence, every Real number x, can be written as
+      <math>
+        <mrow>
+          <mn>1</mn>
+          <mi>x</mi>
+        </mrow>
+      </math>
+      <br />
+      For Imaginary numbers the Multiplicative Identity is defined as <math><msqrt><mn>-1</mn></msqrt></math>.
+      Hence, every Imaginary number x, can be written as
+      <math>
+        <mrow>
+          <msqrt><mn>-1</mn></msqrt>
+          <mi>x</mi>
+        </mrow>
+      </math>
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>11.</div>
+    <div class='x'>
+      <span class='idx-sm'>11.</span>
+      The question that comes to mind at this point is: why <math><msqrt><mn>-1</mn></msqrt></math>?<br />
+      It is helpful to think about this question by framing the following two questions:<br />
+      Why is the Multiplicative Identity the square root of a negative number?<br />
+      Why was -1 choosen as that negative number?<br />
+      <br />
+      We all agree that a negative number cannot have a square root.<br />
+      At this point, we should note that before mathematicians arrived at the concept of negative numbers,
+      one might have found it impossible to imagine negative numbers.<br />
+      Similarly, prior to the evolution of the concept of irrational numbers, it might not have been easy
+      to think of numbers that cannot be represented as a fraction of integers.<br />
+      The discovery of Zero itself, has been a relatively recent event in the history of mathematics.<br />
+      <br />
+      In each case, the new discovery was able to represent something that was un-representable in the existing system.<br />
+      For example, Rational numbers can express quantities that natural numbers alone cannot - ratios of various nature; ideas that evolved as people started to trade with each other.<br />
+      The Greek mathematician Pythagoras initially thought that any number could be expressed as a fraction of two integers.<br />
+      Later he learnt that this was not the case and discovered Irrational numbers.<br />
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <h4>The pattern of progress in (mathematical) thought: that which is undefinable will yield the answers we seek:</h4>
+
+  <div class='para'>
+    <div class='idx'>12.</div>
+    <div class='x'>
+      <span class='idx-sm'>12.</span>
+      Therefore, if every class of numbers before the Imaginary number was arrived at by trying to define that which was previously undefined<br />
+      then it would only be logical that someone would search for a similar pattern and identify the next undefined "thing" to build upon.<br />
+      That undefined "thing" was the square root of a negative number.<br />
+      <br />
+      The choice of <math><msqrt><mn>-1</mn></msqrt></math> reminds us of 1; we accept 1, without second thought, as the Multiplicative Identity.<br />
+      How different would things be if the Multiplicative Identity of Imaginary numbers was defined as <math><msqrt><mn>-2</mn></msqrt></math>?<br >
+      Would we consider <math><msqrt><mn>-2</mn></msqrt></math> to be twice as undefined as <math><msqrt><mn>-1</mn></msqrt></math>?
+      - I don't think we can.<br />
+      There can't be degrees of undefinedness when comparing two or more undefined values;<br />
+      - If such a case existed we could select one of those value as an 'origin' and define the rest relative to this origin - and they would not be undefined anymore.<br />
+      Hence, I think that the choice of -1 is primarly motivated by the need to it make easier for us think of <math><msqrt><mn>-1</mn></msqrt></math> as the Multiplicative Identity.<br />
+      <br />
+      The symbol i, that is used to represent an imaginary number and which is defined as follows:<br />
+      <math>
+        <mrow>
+          <msup>
+            <mi>i</mi>
+            <mn>2</mn>
+          </msup>
+          <mo>=</mo>
+          <mn>-1</mn>
+        </mrow>
+      </math>
+      <br />
+      <math>
+        <mrow>
+          <mn>i</mn>
+          <mo>=</mo>
+          <msqrt><mn>-1</mn></msqrt>
+        </mrow>
+      </math>
+      <br />
+      is similar in spirit to the + and - symbols used to denote positive and negative integers.<br />
+      It is also similar in spirit to the ... symbol placed after an irrational number like 3.141592653589793...<br />
+      <br />
+      In all these cases, the symbols allow us to imagine beyond the bounds that were previously established.<br />
+      Therefore, the Imaginary number is not some kind of secret, difficult to fathom number.
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>13.</div>
+    <div class='x'>
+      <span class='idx-sm'>13.</span>
+      Sita Aur Gita is a Indian lost & found movie about two twin sisters; separated at birth; both alike in appearance but exposed to different circumstances.<br />
+      Eventually the two sisters meet and Gita introduces herself to Sita thus: <i>"Do not be surprised sister Sita, I am not foreign to you - I am you in a different form".</i><br />
+      This is how we can understand the Real and Imaginary numbers - different forms of each other.<br />
+      Each unimaginable from the other's point of view, but both exist.<br />
+      <br />
+      The philosopher mathematician Rene Descartes came up with the term "Imaginary number".<br />
+      It seems, his use of the word "Imaginary" was meant to be derogatory.<br />
+      However, given all the useful applications it has found as a part of the complex number, the Imaginary number has done quite well for itself.<br />
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>14.</div>
+    <div class='x'>
+      <span class='idx-sm'>14.</span>
+      When pair together as a Complex Number, Real and Imaginary numbers form a powerful mental tool.<br />
+      This tool allows us work with things & concepts that are best represented & understood by two quantities.<br />
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Electrical_impedance">Electrical impedance</a> is an example of such a concept.<br />
+      What resistance is in a DC circuit, impedance is in an AC circuit.<br />
+      Impedance contains two numbers. Adding and multiplying impedance values is implemented as complex number addition and multiplication.
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>15.</div>
+    <div class='x'>
+      <span class='idx-sm'>15.</span>
+      Treating a pair of numbers as a single number by defining addition/multiplication etc for these pairs is also done with vectors.<br />
+      However vector arithmetic is defined differently from complex number arithmetic.<br />
+      Some concepts are better understood with complex numbers, while others are more suitable for vectors.<br />
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+</div>
+
+<script>
+  window.addEventListener(
+    'load', function(event) {
+       /* ["/js/all_complex_numbers.js"] */
+       ["/js/d3.v3.min.js", "/js/complex_numbers.js"].forEach(function(script_src_url) {
+         var script_element = window.document.createElement('script')
+         script_element.src = script_src_url
+         script_element.type = 'text/javascript'
+         script_element.async = false
+         window.document.body.appendChild(script_element)
+       })
+    }
+  )
+</script>
