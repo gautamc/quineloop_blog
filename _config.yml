@@ -1,2 +1,10 @@
 markdown: rdiscount
 highlighter: true
+
+gems:
+- jekyll-textile-converter
+
+collections:
+  complex_numbers:
+    output: true
+
