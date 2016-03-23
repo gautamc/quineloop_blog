@@ -15,7 +15,7 @@ h3. {{ page.title }}
       <span class='idx-sm'>1.</span>
       A complex number has the form a + bi where a and b are defined as two real numbers and <math><mrow><msup><mi>i</mi><mn>2</mn></msup><mo>=</mo><mn>-1</mn></mrow></math>.<br />
       The `+` between `a` and `bi` does not mean that we are somehow going to add `a` into `bi`.<br />
-      The `+` is simply a convention - we must look at the complex number as pair of two numbers `a` and `bi`.<br />
+      The `+` is simply a convention - we must look at the complex number as a pair of two numbers `a` and `bi`.<br />
       The plot given below is the familiar complex plane. Each point on the plane is a complex number.<br />
       <style>
         .axis {
@@ -284,7 +284,7 @@ h3. {{ page.title }}
       <br />
       The philosopher mathematician Rene Descartes came up with the term "Imaginary number".<br />
       It seems, his use of the word "Imaginary" was meant to be derogatory.<br />
-      However, given all the useful applications it has found as a part of the complex number, the Imaginary number has done quite well for itself.<br />
+      However, given all the useful applications it has found, while being part of the complex number, the Imaginary number has done quite well for itself.<br />
     </div>
   </div>
   <div class='para-brk'></div>
@@ -293,7 +293,7 @@ h3. {{ page.title }}
     <div class='idx'>14.</div>
     <div class='x'>
       <span class='idx-sm'>14.</span>
-      When pair together as a Complex Number, Real and Imaginary numbers form a powerful mental tool.<br />
+      When paired together as a Complex Number, Real and Imaginary numbers form a powerful mental tool.<br />
       This tool allows us work with things & concepts that are best represented & understood by two quantities.<br />
       <a target="_blank" href="https://en.wikipedia.org/wiki/Electrical_impedance">Electrical impedance</a> is an example of such a concept.<br />
       What resistance is in a DC circuit, impedance is in an AC circuit.<br />
