@@ -55,8 +55,20 @@ $(document).ready(
 	  r: d3.round(scaleX.invert(x), 2),
 	  i: d3.round(scaleY.invert(y), 2)
 	};
-        $("#selected-complex-number").text(complex.r + ' + ' + complex.i + 'i')
-        d3.event.stopPropagation();
+
+        if (d3.event.pageX != undefined && d3.event.pageY != undefined) {
+	  overlay_x = d3.event.pageX
+	  overlay_y = d3.event.pageY
+	} else {
+	  overlay_x = d3.event.clientX + document.body.scrollLeft +
+	    document.documentElement.scrollLeft
+	  overlay_y = d3.event.clientY + document.body.scrollTop +
+	    document.documentElement.scrollTop
+	}
+	$("#cp-tooltip").css('top', overlay_y + 'px').css('left', overlay_x + 'px')
+        $("#cp-tooltip").text(complex.r + ' + ' + complex.i + 'i')
+        $("#cp-tooltip").show()
+        d3.event.stopPropagation()
       })
 
     svg.append('g').attr({

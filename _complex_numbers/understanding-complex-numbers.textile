@@ -36,8 +36,16 @@ h3. {{ page.title }}
           fill: none;
           pointer-events: all;
         }
+        #cp-tooltip {
+          display: none;
+          position: absolute;
+          background: #00f;
+          color: #fff;
+          padding: 5px;
+        }
       </style>
       <h4 id="selected-complex-number"></h4>
+      <div id="cp-tooltip" class="tooltip fade top in"></div>
       <div class="complex-plane"></div>
       The following notes are my attempt to deconstruct and understand the complex number.<br />
       <br />      
@@ -232,11 +240,11 @@ h3. {{ page.title }}
     <div class='idx'>12.</div>
     <div class='x'>
       <span class='idx-sm'>12.</span>
-      Therefore, if every class of numbers before the Imaginary number was arrived at by trying to define that which was previously undefined<br />
+      Therefore, if different kinds of numbers were arrived at previously by trying to define that which was undefined<br />
       then it would only be logical that someone would search for a similar pattern and identify the next undefined "thing" to build upon.<br />
       That undefined "thing" was the square root of a negative number.<br />
       <br />
-      The choice of <math><msqrt><mn>-1</mn></msqrt></math> reminds us of 1; we accept 1, without second thought, as the Multiplicative Identity.<br />
+      The choice of <math><msqrt><mn>-1</mn></msqrt></math> reminds us of 1; it is easy for us to accept 1 as the Multiplicative Identity.<br />
       How different would things be if the Multiplicative Identity of Imaginary numbers was defined as <math><msqrt><mn>-2</mn></msqrt></math>?<br >
       Would we consider <math><msqrt><mn>-2</mn></msqrt></math> to be twice as undefined as <math><msqrt><mn>-1</mn></msqrt></math>?
       - I don't think we can.<br />
