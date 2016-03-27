@@ -1,8 +1,8 @@
 $(document).ready(
   function() {
     var extent = 10, width = 500, height = 500, margin = { top:10, left:10, bottom:10, right:10 },
-	plotWidth = width-(margin.left+margin.right), plotHeight = height-(margin.top+margin.bottom)
-
+    plotWidth = width-(margin.left+margin.right), plotHeight = height-(margin.top+margin.bottom),
+    point, point_lbl, selected_point
 
     var window_width = $( window ).width()
     if( window_width < 525 ) {
@@ -55,19 +55,27 @@ $(document).ready(
 	  r: d3.round(scaleX.invert(x), 2),
 	  i: d3.round(scaleY.invert(y), 2)
 	};
-
-        if (d3.event.pageX != undefined && d3.event.pageY != undefined) {
-	  overlay_x = d3.event.pageX
-	  overlay_y = d3.event.pageY
-	} else {
-	  overlay_x = d3.event.clientX + document.body.scrollLeft +
-	    document.documentElement.scrollLeft
-	  overlay_y = d3.event.clientY + document.body.scrollTop +
-	    document.documentElement.scrollTop
-	}
-	$("#cp-tooltip").css('top', overlay_y + 'px').css('left', overlay_x + 'px')
-        $("#cp-tooltip").text(complex.r + ' + ' + complex.i + 'i')
-        $("#cp-tooltip").show()
+        point.attr({
+          'cx': x,
+          'cy': y
+        })
+        var text_anchor, lbl_x, lbl_y = y-5;
+        if( parseFloat(point.attr('cx')) > 300 ) {
+          lbl_x = x
+          text_anchor = 'end'
+        } else {
+          lbl_x = x+5
+          text_anchor = 'start'
+        }
+        if( parseFloat(point.attr('cy')) < 20 ) {
+          lbl_y = y+15
+        }
+        point_lbl.attr({
+          'x': lbl_x,
+          'y': lbl_y,
+          'text-anchor': text_anchor
+        })
+        .text(complex.r + ' + ' + complex.i + 'i')
         d3.event.stopPropagation()
       })
 
@@ -80,5 +88,25 @@ $(document).ready(
       'class': 'y axis',
       'transform': 'translate('+plotHeight/2+',0)'
     }).call(yAxis);
+
+    var selected_point = svg.append('g');
+    var point = selected_point
+      .append('circle')
+      .attr({
+        'id': 'point',
+        'r': 5,
+        'fill': 'blue',
+        'cx': function() { return scaleX(1.0) },
+        'cy': function() { return scaleY(1.0) }
+      })
+    var point_lbl = selected_point
+      .append('text')
+      .attr({
+        'id': 'point-lbl',
+        'x': function() { return parseFloat(point.attr('cx')) + 5 },
+        'y': function() { return parseFloat(point.attr('cy')) - 5 },
+        'fill': 'blue'
+      })
+      .text('1.0 + 1.0i')
   }
 )
