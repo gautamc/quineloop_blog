@@ -6,7 +6,7 @@ $(document).ready(
 
     var window_width = $( window ).width()
     if( window_width < 525 ) {
-      $(".complex-plane").css('width', (window_width-20)+'px')
+      $(".complex-plane").css('width', (window_width-30)+'px')
       $(".complex-plane").css('overflow-x', 'scroll')
     }
 
