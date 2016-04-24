@@ -5,9 +5,101 @@ title: Rendering Mandelbrot Set using canvas and d3.js
 
 h3. {{ page.title }}
 
-p(meta). 21 July 2013
+<i>Initially drafted in Aug 2013; updated April 2016</i>
 
 <div class="post_payload">
+
+  <h3> --------- Work in progress ------------</h3>
+
+  <h4>What does the Mandelbrot set contain and how do we build it?</h4>
+
+  <div class='para'>
+    <div class='idx'>1.</div>
+    <div class='x'>
+      <span class='idx-sm'>1.</span>
+      A "Mandelbrot set" is a collection of complex numbers. It contains as its elements various complex numbers.<br />
+      To check if <u>a given complex number</u> is in the "Mandelbrot set", we have to <u>perform a certain mathematical operation</u> on the complex number <u>over and over</u> to <u>identify if the result has a certain property</u>.<br />
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>2.</div>
+    <div class='x'>
+      <span class='idx-sm'>2.</span>
+      <i>What do we mean by the phrase "<u>a given complex number</u>"?</i><br />
+      Every complex number in the complex plane is either in the Mandelbrot set or it is not.<br />
+      Therefore, to build the Mandelbrot set we have to take each complex number in the complex plane and check if it is in the Mandelbrot set.<br />
+      When implemented as a computer program, this process of "taking each complex number" - can be implemented as a loop.<br />
+      <br />
+      The logic that checks if a complex number is in the Mandelbrot set - can be implemented as a function.<br />
+      This function takes as input a complex number and will be executed in the aforementioned loop.<br />
+      The function itself, has to perform a mathematical operation over and over - hence it will execute a loop too.<br />
+      <br />
+      Therefore to understand the "Mandelbrot set", we must understand three things:<br />
+      &nbsp; => The mathematical operation - performed on a given complex number<br />
+      &nbsp; => The result - of this mathematical operation<br />
+      &nbsp; => The property of this result - since it determines if the complex number is in the "Mandelbrot set"<br />
+      <br />
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <h4>The mathematical operation:</h4>
+  <p>
+    The mathematical operation contains two complex numbers.<br />
+    It performs one complex number Multiplication operation and
+    one complex number addition operation.<br />
+    <br />
+    Let us call the two complex numbers: c and z
+    <br />
+    The complex number c:<br />
+      We have to detect if c is a member of the "Mandelbrot set".<br />
+      Therefore, we get to choose the value of c.<br />
+    <br />
+    The complex number z:<br />
+      As we perform the mathematical operation over and over we will store the result in z<br />
+      Before we perform the mathematical operation for the first time we will set the value of z to 0.<br />
+      Therefore, previous results will have a say in determining the latest result.<br />
+    <br />
+    step 1: Square z<br />
+    step 2: Add c to result of step 1<br />
+    step 3: assign the result of step 2 to z<br />
+    These 3 steps can be written as:<br />
+    z = z^2 + c
+    <br />
+    We have to perform this operation until we are able to determine if the z is Zero
+  </p>
+
+  <h4></h4>
+  <p>
+    If this result approaches Zero then we conclude that the given complex number is in the "Mandelbrot set".<br />
+    Otherwise, we conclude that the given complex number is not in the "Mandelbrot set".<br />
+    <br />
+    For each complex number that is not part of the Mandelbrot set<br />
+    we are interested in knowing how quickly we are able to decide that the<br />
+    results of the mathematical operation will not approach Zero.<br />
+    <br />
+    This property of the result not approaching Zero, is referred to as 'escaping to Infinity'<br />
+      - if it is not moving towards Zero, then it must be moving towards Infinity.<br />
+    <br />
+    How can I be sure that when I perform this operation repeatedly,<br />
+    the result will not remain unchanged - neither approach Zero nor escape to Infinity?<br />
+    <br />
+    to find the answer for these questions, let us look at this mathematical operation:<br />
+    <br />
+    initialize z = 0<br />
+    c = z^2 + c<br />
+    
+  </p>
+
+  <p>
+    z_n+1 = z_n^2 + c<br />
+    z_1 = 0^2 + c when n = 0<br />
+    z_2 = c^2 + c when n = 1<br />
+    z_3 = (c^2+c)^2 + c when n = 2<br />
+    z+4 = ((c^2+c)^2+c)^2 + c<br />
+  </p>
 
   <center>
     <div id="rendering-mandelbrot" class="center">
@@ -16,8 +108,6 @@ p(meta). 21 July 2013
     <div id="mandelbrot">
     </div>
   </center>
-
-  <h4>Synopsis:</h4>
 
   <h4>The Details:</h4>
 
