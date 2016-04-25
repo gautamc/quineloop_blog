@@ -11,14 +11,23 @@ h3. {{ page.title }}
 
   <h3> --------- Work in progress ------------</h3>
 
+  <center>
+    <div id="rendering-mandelbrot" class="center">
+      <b>Rendering Mandelbrot set!</b> <img src="/images/spinner.gif" />
+    </div>
+    <div id="mandelbrot">
+    </div>
+  </center>
+
   <h4>What does the Mandelbrot set contain and how do we build it?</h4>
 
   <div class='para'>
     <div class='idx'>1.</div>
     <div class='x'>
       <span class='idx-sm'>1.</span>
-      A "Mandelbrot set" is a collection of complex numbers. It contains as its elements various complex numbers.<br />
-      To check if <u>a given complex number</u> is in the "Mandelbrot set", we have to <u>perform a certain mathematical operation</u> on the complex number <u>over and over</u> to <u>identify if the result has a certain property</u>.<br />
+      A "Mandelbrot set" is a collection of complex numbers; It contains as its elements various complex numbers.<br />
+      To check if <u>a given complex number</u> is in the "Mandelbrot set", we have to <u>perform a certain mathematical operation</u>
+      on the complex number <u>over and over</u> to <u>identify if the result has a certain property</u>.<br />
     </div>
   </div>
   <div class='para-brk'></div>
@@ -29,17 +38,82 @@ h3. {{ page.title }}
       <span class='idx-sm'>2.</span>
       <i>What do we mean by the phrase "<u>a given complex number</u>"?</i><br />
       Every complex number in the complex plane is either in the Mandelbrot set or it is not.<br />
-      Therefore, to build the Mandelbrot set we have to take each complex number in the complex plane and check if it is in the Mandelbrot set.<br />
-      When implemented as a computer program, this process of "taking each complex number" - can be implemented as a loop.<br />
+      Therefore, to build the Mandelbrot set we have to take each complex number in the complex plane
+      and check if it is in the Mandelbrot set.<br />
       <br />
-      The logic that checks if a complex number is in the Mandelbrot set - can be implemented as a function.<br />
-      This function takes as input a complex number and will be executed in the aforementioned loop.<br />
-      The function itself, has to perform a mathematical operation over and over - hence it will execute a loop too.<br />
-      <br />
-      Therefore to understand the "Mandelbrot set", we must understand three things:<br />
-      &nbsp; => The mathematical operation - performed on a given complex number<br />
+      For example, the following block of code uses two loops, one nested inside the other, to print complex numbers
+      between -1 + -1i and 1 + 1i ; in steps of 0.5:<br />
+
+<pre>
+for(
+  var real_part = -1.0;
+      real_part <= 1.0;
+      real_part += 0.5
+) {
+  for(
+    var imaginary_part = -1.0;
+        imaginary_part <= 1.0;
+        imaginary_part += 0.5
+  ) {
+
+    var given_complex_number = {
+      real: real_part,
+      imaginary: imaginary_part
+    }
+    console.log(
+      given_complex_number.real +
+      ' + ' +
+      given_complex_number.imaginary +
+      'i'
+    )
+
+    /** This function needs to be implemented **/
+    // isMemberOfMandelbrotSet(given_complex_number)
+
+  }
+}
+
+OUTPUT:
+
+-1 + -1i
+-1 + -0.5i
+-1 + 0i
+-1 + 0.5i
+-1 + 1i
+-0.5 + -1i
+-0.5 + -0.5i
+-0.5 + 0i
+-0.5 + 0.5i
+-0.5 + 1i
+0 + -1i
+0 + -0.5i
+0 + 0i
+0 + 0.5i
+0 + 1i
+0.5 + -1i
+0.5 + -0.5i
+0.5 + 0i
+0.5 + 0.5i
+0.5 + 1i
+1 + -1i
+1 + -0.5i
+1 + 0i
+1 + 0.5i
+1 + 1i
+</pre>
+
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>3.</div>
+    <div class='x'>
+      <span class='idx-sm'>3.</span>
+      <i>The mathematical operation and its result:</i><br />
+      &nbsp; => The mathematical operation - performed on the given complex number<br />
       &nbsp; => The result - of this mathematical operation<br />
-      &nbsp; => The property of this result - since it determines if the complex number is in the "Mandelbrot set"<br />
+      &nbsp; => The property of this result, which determines if the complex number is in the "Mandelbrot set"<br />
       <br />
     </div>
   </div>
@@ -100,16 +174,6 @@ h3. {{ page.title }}
     z_3 = (c^2+c)^2 + c when n = 2<br />
     z+4 = ((c^2+c)^2+c)^2 + c<br />
   </p>
-
-  <center>
-    <div id="rendering-mandelbrot" class="center">
-      <b>Rendering Mandelbrot set!</b> <img src="/images/spinner.gif" />
-    </div>
-    <div id="mandelbrot">
-    </div>
-  </center>
-
-  <h4>The Details:</h4>
 
 </div>
 
