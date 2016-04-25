@@ -19,7 +19,7 @@ h3. {{ page.title }}
     </div>
   </center>
 
-  <h4>What does the Mandelbrot set contain and how do we build it?</h4>
+  <h4>What does the Mandelbrot set contain?</h4>
 
   <div class='para'>
     <div class='idx'>1.</div>
@@ -32,11 +32,11 @@ h3. {{ page.title }}
   </div>
   <div class='para-brk'></div>
 
+  <h4>What does the phrase "<u>a given complex number</u>" mean?</h4>
   <div class='para'>
     <div class='idx'>2.</div>
     <div class='x'>
       <span class='idx-sm'>2.</span>
-      <i>What do we mean by the phrase "<u>a given complex number</u>"?</i><br />
       Every complex number in the complex plane is either in the Mandelbrot set or it is not.<br />
       Therefore, to build the Mandelbrot set we have to take each complex number in the complex plane
       and check if it is in the Mandelbrot set.<br />
@@ -105,6 +105,8 @@ OUTPUT:
     </div>
   </div>
   <div class='para-brk'></div>
+
+  <h4>What does the mathematical operation do?</h4>
 
   <div class='para'>
     <div class='idx'>3.</div>
