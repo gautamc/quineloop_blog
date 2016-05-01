@@ -118,13 +118,121 @@ for(
       <br />
       But, to create the visualization we need more than just a simple nested loop that can give us complex numbers.<br />
       <br />
-      (a) We should be able to access each pixel so that it can be associated with a complex number.<br />
-      For efficiently reading & writeing indiviual pixels we can use the ImageData object that is part of the canvas element.<br />
+      (a) We should be able to transform a screen area of some pixel height & width into a complex plane containing Real and Imaginary axes.<br />
+      We can use a D3.js scale to transform a screen pixel's location into a point on the complex plane.<br />
+      <br />
+      If the Real axis is positioned across the width of the canvas element then we have to map each pixel's X coordinate
+      along the width to a Real number.<br />
+      The following example creates a function named real_scale that maps values from 0 to 300 to a number between -2.0 and 1:<br />
+<pre>
+> var real_scale = d3.scale.linear()
+    .domain([0,300])
+    .range([-2.0, 1])
+> real_scale(0)
+  -2
+> real_scale(150)
+  -0.5
+> real_scale(200)
+  0
+> real_scale(300)
+  1
+</pre>
+      <br />
+      Similarly, for the the imaginary axis along the height of the canvas element we need to map each pixel's Y
+      coordinate to a Imaginary number.<br />
+      The following example creates a function named imaginary_scale.
+      It takes as input a pixel's Y coordinate and return the imaginary part of a complex number:<br />
+<pre>
+> var imaginary_scale = d3.scale.linear()
+    .domain([0,300])
+    .range([1, -1])
+> imaginary_scale(0)
+  1
+> imaginary_scale(150)
+  0
+> imaginary_scale(200)
+  0
+> imaginary_scale(300)
+  -1
+</pre>
+      <br />
+      (b) We should be able to access each pixel so that it can be associated with a complex number.<br />
+      For efficiently reading & writing indiviual pixels we can use the ImageData object that is part of the canvas element.<br />
       The ImageData object represents underlying pixel data of an area of a canvas element.<br />
       <br />
-      (b) We should be able to transform a screen area of some pixel height & width into a complex plane containing Real and Imaginary axes.
-      <br />    
+      The following block of code creates a 100px by 100px canvas element and uses createImageData to create a ImageData
+      object that can represent 1 pixel.<br />
+      The ImageData object has a property named data - this an array which stores the RGB & Alpha values for pixels that the object represents.<br />
+      We can use putImageData() method to write the pixel at certain coordinate on the canvas<br />
+<pre>
+// 1. Create a canvas element
+var canvas = document.body.appendChild(
+  document.createElement('canvas')
+)
+canvas.setAttribute("height", 100)
+canvas.setAttribute("width", 100)
+canvas.setAttribute("style", "border: 1px solid black;")
 
+// ctx points to a object that belongs to the canvas.
+// It provides functions we use to draw things on the canvas.
+ctx = canvas.getContext('2d')
+
+// 2. Create ImageObject to represent 1 pixel
+var img_data = ctx.createImageData(1, 1)
+
+// 3. Use the data property to set RGBA values for 1 pixel
+img_data.data[0] = 0   // R
+img_data.data[1] = 0   // G
+img_data.data[2] = 0   // B
+img_data.data[3] = 255 // A
+
+// 4. Write to the pixel at canvas location 50, 50
+ctx.putImageData(img_data, 50, 50)
+// Write to the pixel at canvas location 50, 51
+ctx.putImageData(img_data, 50, 51)
+// Write to the pixel at canvas location 51, 50
+ctx.putImageData(img_data, 51, 50)
+// Write to the pixel at canvas location 49, 50
+ctx.putImageData(img_data, 49, 50)
+// Write to the pixel at canvas location 50, 49
+ctx.putImageData(img_data, 50, 49)
+</pre>
+    <br />
+    Therefore, the block of code that will loop over all complex numers in the complex plane
+    that is bounded in the real axis by [-2.0, 1.0] and in the imaginary_scale by [1, -1]:<br />
+<pre>
+var width = 200, height = 200, canvas, ctx, one_pixel, real_scale, imaginary_scale
+
+canvas = document.body.appendChild(
+  document.createElement('canvas')
+)
+canvas.setAttribute("height", height)
+canvas.setAttribute("width", width)
+ctx = canvas.getContext('2d')
+one_pixel = ctx.createImageData(1, 1)
+
+real_scale = d3.scale.linear()
+  .domain([0, width])
+  .range([-2.0, 1])
+
+imaginary_scale = d3.scale.linear()
+  .domain([0, height])
+  .range([1, -1])
+
+for(var r = 0; r < width; r++) {
+  for(var i = 0; i < height; i++) {
+
+    // c => The given complex number
+    var c = { r: real_scale(r), i: imaginary_scale(i) }
+    var z = { r: 0, i: 0 }
+
+    // perform the mathematical operation over and over
+    // and figure out of the complex number c is in the 
+    // Mandelbrot set.
+
+  }
+}
+</pre>
     </div>
   </div>
   <div class='para-brk'></div>
@@ -135,6 +243,7 @@ for(
       <span class='idx-sm'>3.</span>
       <b>Repetitive squaring of a complex number and then adding another complex number to it:</b>
       <br />
+      
     </div>
   </div>
   <div class='para-brk'></div>
