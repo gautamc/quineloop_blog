@@ -25,7 +25,7 @@ h3. {{ page.title }}
     <div class='idx'>1.</div>
     <div class='x'>
       <span class='idx-sm'>1.</span>
-      A "Mandelbrot set" is a set that contains as its elements various complex numbers.<br />
+      A "Mandelbrot set" is a set that contains complex numbers.<br />
       <br />
       To check if <u>a given complex number</u> is in the "Mandelbrot set", we have to <u>perform a certain mathematical operation</u>
       on the complex number <u>over and over</u> and <u>identify if the result has a certain property</u>.<br />
@@ -33,7 +33,7 @@ h3. {{ page.title }}
       <u>Given complex number</u>: This refers to any complex number that we can choose at will - to check if it is in the "Mandelbrot set"<br />
       <br />
       <u>The repetitive mathematical operation</u>:<br />
-      A simplified but not entierly accurate description of the mathematical operation can say
+      A simplified but not accurate description of the mathematical operation can say
       that we square the given complex number and add it to itself.<br />
       We repeat this operation over and over until we can determine if the result will always stay less than some value.<br />
       This property of always staying less then some value is called being <b>"bounded"</b>.<br />
@@ -56,7 +56,7 @@ h3. {{ page.title }}
       </math>
       <br />
       Where <math><mi mathvariant='bold'>c</mi></math> is the <b>Given complex number</b><br />
-      and <math><mi>z</mi></math> is the result we got from the previous call to this function.<br />
+      and <math><mi>z</mi></math> - the parameter passed to this function - is also the result we got from the previous call to this function.<br />
       When we call the function for the first time we use Zero as the value of <math><mi>z</mi></math>.<br />
       One must note that the "Given complex number" <math><mi mathvariant='bold'>c</mi></math> is a constant in the function.<br />
       The subscript <math><mi>c</mi></math> in <math><msub><mi>f</mi><mn mathvariant='bold'>c</mn></msub></math>
@@ -68,10 +68,10 @@ h3. {{ page.title }}
       If the result of this repeated operation does not stay within any bounds and keeps moving towards Infinity with each
       repetition - then the complex number is not a member of the "Mandelbrot set".<br />
       <br />
-      In the above "Mandelbrot set" visualization, each pixel represents a complex number.<br />
+      In the popular "Mandelbrot set" visualization, each pixel on the screen represents a complex number.<br />
       A pixel is colored black if the complex number it represents is part of "Mandelbrot set".<br />
       If the complex number representing a pixel is not in the "Mandelbrot set" then we assign it a color based on how quickly
-      we were able to determine that it will "escape to" Infinity.
+      we were able to determine that it is not a member of the "Mandelbrot set".
     </div>
   </div>
   <div class='para-brk'></div>
@@ -121,7 +121,7 @@ for(
       (a) We should be able to transform a screen area of some pixel height & width into a complex plane containing Real and Imaginary axes.<br />
       We can use a D3.js scale to transform a screen pixel's location into a point on the complex plane.<br />
       <br />
-      If the Real axis is positioned across the width of the canvas element then we have to map each pixel's X coordinate
+      If the Real axis is positioned across the width of the canvas element then we have to map the X coordinate of each pixel
       along the width to a Real number.<br />
       The following example creates a function named real_scale that maps values from 0 to 300 to a number between -2.0 and 1:<br />
 <pre>
@@ -138,8 +138,8 @@ for(
   1
 </pre>
       <br />
-      Similarly, for the the imaginary axis along the height of the canvas element we need to map each pixel's Y
-      coordinate to a Imaginary number.<br />
+      Similarly, for the imaginary axis along the height of the canvas element, we need to map the Y coordinate
+      of each pixel to a Imaginary number.<br />
       The following example creates a function named imaginary_scale.
       It takes as input a pixel's Y coordinate and return the imaginary part of a complex number:<br />
 <pre>
@@ -158,7 +158,7 @@ for(
       <br />
       (b) We should be able to access each pixel so that it can be associated with a complex number.<br />
       For efficiently reading & writing indiviual pixels we can use the ImageData object that is part of the canvas element.<br />
-      The ImageData object represents underlying pixel data of an area of a canvas element.<br />
+      The ImageData object can represent the underlying pixel data of an area in a canvas element.<br />
       <br />
       The following block of code creates a 100px by 100px canvas element and uses createImageData to create a ImageData
       object that can represent 1 pixel.<br />
@@ -243,7 +243,159 @@ for(var r = 0; r < width; r++) {
       <span class='idx-sm'>3.</span>
       <b>Repetitive squaring of a complex number and then adding another complex number to it:</b>
       <br />
-      
+      Multiplying two complex numbers results in a complex number - in our case, we are multiplying a complex number to itself.<br />
+      How do we figure out what the real and imaginary parts of this resultant complex number is?<br />
+      <math>
+        <mfenced open="(" close=")" separators=""><mi>a</mi><mo>+</mo><mi>b</mi><mi>i</mi></mfenced>
+        <mo>&times;</mo>
+        <mfenced open="(" close=")" separators=""><mi>a</mi><mo>+</mo><mi>b</mi><mi>i</mi></mfenced>
+        <mo>=</mo>
+        <mfenced open="(" close=")" separators=""><mi>?</mi><mo>+</mo><mi>?</mi><mi>i</mi></mfenced>
+      </math>
+      <br />
+      <br />
+      When multiplying, the real part of the first number is multiplied with the real and imaginary parts of the second number: 
+      <math>
+        <mfenced open="(" close=")" separators="">
+          <mi>a</mi><mo>&times;</mo><mi>a</mi>
+        </mfenced>
+        <mo>+</mo>
+        <mfenced open="(" close=")" separators="">
+          <mi>a</mi><mo>&times;</mo><mi>bi</mi>
+        </mfenced>
+      </math>
+      <br />
+      Similarly, the imaginary part of first number is also multiplied with the real and imaginary parts of the second number: 
+      <math>
+        <mfenced open="(" close=")" separators="">
+          <mi>bi</mi><mo>&times;</mo><mi>a</mi>
+        </mfenced>
+        <mo>+</mo>
+        <mfenced open="(" close=")" separators="">
+          <mi>bi</mi><mo>&times;</mo><mi>bi</mi>
+        </mfenced>
+      </math>
+      <br />
+      Therefore:<br />
+      <math>
+        <mfenced open="(" close=")" separators=""><mi>a</mi><mo>+</mo><mi>b</mi><mi>i</mi></mfenced>
+        <mo>&times;</mo>
+        <mfenced open="(" close=")" separators=""><mi>a</mi><mo>+</mo><mi>b</mi><mi>i</mi></mfenced>
+        <mo>=</mo>
+        <mfenced open="(" close=")" separators="">
+          <mi>a</mi><mo>&times;</mo><mi>a</mi>
+        </mfenced>
+        <mo>+</mo>
+        <mfenced open="(" close=")" separators="">
+          <mi>a</mi><mo>&times;</mo><mi>bi</mi>
+        </mfenced>
+        <mo>+</mo>
+        <mfenced open="(" close=")" separators="">
+          <mi>bi</mi><mo>&times;</mo><mi>a</mi>
+        </mfenced>
+        <mo>+</mo>
+        <mfenced open="(" close=")" separators="">
+          <mi>bi</mi><mo>&times;</mo><mi>bi</mi>
+        </mfenced>
+      </math>
+      <br />
+      <br />
+      Since <math><mrow><msup><mi>i</mi><mn>2</mn></msup><mo>=</mo><mn>-1</mn></mrow></math>, we can conclude that 
+      <math>
+        <mfenced open="(" close=")" separators="">
+          <mi>bi</mi><mo>&times;</mo><mi>bi</mi>
+        </mfenced>
+        <mo>=</mo>
+        <mo>-</mo>
+        <msup><mi>b</mi><mn>2</mn></msup>
+      </math>
+      <br />
+      Therefore, the Real part of the result for our squaring operation is:
+      <math>
+        <msup><mi>a</mi><mn>2</mn></msup>
+        <mo>-</mo>
+        <msup><mi>b</mi><mn>2</mn></msup>
+      </math>
+      <br /><br />
+      The Imaginary part of the result is:
+      <math>
+        <mfenced open="(" close=")" separators="">
+          <mi>a</mi><mo>&times;</mo><mi>bi</mi>
+        </mfenced>
+        <mo>+</mo>
+        <mfenced open="(" close=")" separators="">
+          <mi>bi</mi><mo>&times;</mo><mi>a</mi>
+        </mfenced>
+        <mo>=</mo>
+        <mi>2</mi>
+        <mo>&times;</mo>
+        <mfenced open="(" close=")" separators="">
+          <mi>a</mi><mo>&times;</mo><mi>bi</mi>
+        </mfenced>
+      </math>
+      <br />
+      This multiplication of a imaginary number with a real number results in a imaginary number<br />
+      - to understand why that should be the case, it helps to realize that i is the multiplicative identity of imaginary numbers.<br />
+      <br />
+      Implemented in our javascript this multiplication will look like this:<br />
+<pre>
+> var z = { r: 1.5, i: 1.5 }
+  var square_of_z = { r: null, i: null }
+  square_of_z.r = (z.r * z.r) - (z.i * z.i)
+  square_of_z.i = (2 * z.r * z.i)
+> square_of_z
+  Object { r: 0, i: 4.5 }
+</pre>
+    Adding two complex numbers, simply adds the two Real parts and the two Imaginary parts respectively.<br />
+<pre>
+> square_of_z = { r: 0, i: 4.5 } 
+  c = { r: 1.5, i: 1.5 }
+  new_z = { r: square_of_z.r + c.r, i: square_of_z.i + c.i }
+> new_z
+  Object { r: 1.5, i: 6 }
+</pre>
+    Therefore, the javascript code to loop over all complex numbers and then perform the
+    repetitive mathematical operation will look something like this:
+<pre>
+var width = 200, height = 200, real_scale, imaginary_scale
+
+real_scale = d3.scale.linear()
+  .domain([0, width])
+  .range([-2.0, 1])
+
+imaginary_scale = d3.scale.linear()
+  .domain([0, height])
+  .range([1, -1])
+
+for(var r = 0; r < width; r++) {
+  for(var i = 0; i < height; i++) {
+
+    // c => The given complex number
+    var c = { r: real_scale(r), i: imaginary_scale(i) }
+    var z = { r: 0, i: 0 }
+    var math_op_loop_count = 0
+
+    var what_should_this_condition_be = false
+    while( what_should_this_condition_be ) {
+
+      // square z - remember that z.r and z.i must both be
+      // updated at the same time; hence we use new_z to
+      // temporarily store the partially calculated result
+      var new_z = {}
+      new_z.r = (z.r * z.r) - (z.i * z.i)
+      new_z.i = (2 * z.r * z.i)
+
+      // add c to new_z
+      new_z.r = new_z.r + c.r
+      new_z.i = new_z.i + c.i
+
+      z = new_z
+
+      math_op_loop_count = math_op_loop_count + 1
+    }
+  }
+}
+</pre>
     </div>
   </div>
   <div class='para-brk'></div>
@@ -251,8 +403,18 @@ for(var r = 0; r < width; r++) {
   <div class='para'>
     <div class='idx'>4.</div>
     <div class='x'>
-      <span class='idx-sm'>5.</span>
+      <span class='idx-sm'>4.</span>
       <b>Checking if the resulting complex number has been staying bounded:</b>
+      <br />
+    </div>
+  </div>
+  <div class='para-brk'></div>
+
+  <div class='para'>
+    <div class='idx'>5.</div>
+    <div class='x'>
+      <span class='idx-sm'>5.</span>
+      <b>Implementation avoiding objects for representing the complex numbers:</b>
       <br />
     </div>
   </div>
