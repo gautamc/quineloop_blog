@@ -28,13 +28,14 @@ h3. {{ page.title }}
       A "Mandelbrot set" is a set that contains as its elements various complex numbers.<br />
       <br />
       To check if <u>a given complex number</u> is in the "Mandelbrot set", we have to <u>perform a certain mathematical operation</u>
-      on the complex number <u>over and over</u> to <u>identify if the result has a certain property</u>.<br />
+      on the complex number <u>over and over</u> and <u>identify if the result has a certain property</u>.<br />
       <h5>Meaning:</h5>
       <u>Given complex number</u>: This refers to any complex number that we can choose at will - to check if it is in the "Mandelbrot set"<br />
       <br />
       <u>The repetitive mathematical operation</u>:<br />
-      The mathematical operation <b>squares the given complex number and adds it to itself</b>.<br />
-      We repeat this over and over until we can determine if the result will always stay less than some value.<br />
+      A simplified but not entierly accurate description of the mathematical operation can say
+      that we square the given complex number and add it to itself.<br />
+      We repeat this operation over and over until we can determine if the result will always stay less than some value.<br />
       This property of always staying less then some value is called being <b>"bounded"</b>.<br />
       If the result of a repetative operation is not bounded then it means that it will be -<br />
       Ever increasing - if it moves toward positive Infinity<br />
@@ -42,7 +43,26 @@ h3. {{ page.title }}
       Ever decreasing - if it moves toward negative Infinity<br />
       This behavior is called <b>"escaping to Infinity"</b>.<br />
       <br />
-      <u>property of the result of this repetitive mathematical operation</u>:<br />
+      The operation can be accurately described as the following function:<br />
+      <math>
+        <msub><mi>f</mi><mn mathvariant='bold'>c</mn></msub>
+        <mfenced>
+          <mi>z</mi>
+        </mfenced>
+        <mo>=</mo>
+        <msup><mi>z</mi><mn>2</mn></msup>
+        <mo>+</mo>
+        <mi mathvariant='bold'>c</mi>
+      </math>
+      <br />
+      Where <math><mi mathvariant='bold'>c</mi></math> is the <b>Given complex number</b><br />
+      and <math><mi>z</mi></math> is the result we got from the previous call to this function.<br />
+      When we call the function for the first time we use Zero as the value of <math><mi>z</mi></math>.<br />
+      One must note that the "Given complex number" <math><mi mathvariant='bold'>c</mi></math> is a constant in the function.<br />
+      The subscript <math><mi>c</mi></math> in <math><msub><mi>f</mi><mn mathvariant='bold'>c</mn></msub></math>
+      is simply a convention which remainds us that the "Given complex number" plays a part in defining the behavior of this function.<br />
+      <br />
+      <u>Property of the mathematical operation's result</u>:<br />
       If, for a given complex number, the result of this repeated operation will remain within some bounds
       than we conclude that the complex number is in the "Mandelbrot set".<br />
       If the result of this repeated operation does not stay within any bounds and keeps moving towards Infinity with each
@@ -57,10 +77,13 @@ h3. {{ page.title }}
   <div class='para-brk'></div>
   
   <h4>Who do we implement this as a program?</h4>
+
   <div class='para'>
     <div class='idx'>2.</div>
     <div class='x'>
       <span class='idx-sm'>2.</span>
+      <b>Loop over all complex numbers in the complex plane:</b>
+      <br />
       Every complex number in the complex plane is either in the Mandelbrot set or it is not.<br />
       Therefore, to build the Mandelbrot set we have to take each complex number in the complex plane
       and check if it is in the Mandelbrot set.<br />
@@ -79,7 +102,6 @@ for(
         imaginary_part <= 1.0;
         imaginary_part += 0.5
   ) {
-
     var given_complex_number = {
       real: real_part,
       imaginary: imaginary_part
@@ -90,100 +112,42 @@ for(
       given_complex_number.imaginary +
       'i'
     )
-
-    /** This function needs to be implemented **/
-    // isMemberOfMandelbrotSet(given_complex_number)
-
   }
 }
-
-OUTPUT:
-
--1 + -1i
--1 + -0.5i
--1 + 0i
--1 + 0.5i
--1 + 1i
--0.5 + -1i
--0.5 + -0.5i
--0.5 + 0i
--0.5 + 0.5i
--0.5 + 1i
-0 + -1i
-0 + -0.5i
-0 + 0i
-0 + 0.5i
-0 + 1i
-0.5 + -1i
-0.5 + -0.5i
-0.5 + 0i
-0.5 + 0.5i
-0.5 + 1i
-1 + -1i
-1 + -0.5i
-1 + 0i
-1 + 0.5i
-1 + 1i
 </pre>
+      <br />
+      But, to create the visualization we need more than just a simple nested loop that can give us complex numbers.<br />
+      <br />
+      (a) We should be able to access each pixel so that it can be associated with a complex number.<br />
+      For efficiently reading & writeing indiviual pixels we can use the ImageData object that is part of the canvas element.<br />
+      The ImageData object represents underlying pixel data of an area of a canvas element.<br />
+      <br />
+      (b) We should be able to transform a screen area of some pixel height & width into a complex plane containing Real and Imaginary axes.
+      <br />    
 
     </div>
   </div>
   <div class='para-brk'></div>
 
-  <p>
-    The mathematical operation contains two complex numbers.<br />
-    It performs one complex number Multiplication operation and
-    one complex number addition operation.<br />
-    <br />
-    Let us call the two complex numbers: c and z
-    <br />
-    The complex number c:<br />
-      We have to detect if c is a member of the "Mandelbrot set".<br />
-      Therefore, we get to choose the value of c.<br />
-    <br />
-    The complex number z:<br />
-      As we perform the mathematical operation over and over we will store the result in z<br />
-      Before we perform the mathematical operation for the first time we will set the value of z to 0.<br />
-      Therefore, previous results will have a say in determining the latest result.<br />
-    <br />
-    step 1: Square z<br />
-    step 2: Add c to result of step 1<br />
-    step 3: assign the result of step 2 to z<br />
-    These 3 steps can be written as:<br />
-    z = z^2 + c
-    <br />
-    We have to perform this operation until we are able to determine if the z is Zero
-  </p>
+  <div class='para'>
+    <div class='idx'>3.</div>
+    <div class='x'>
+      <span class='idx-sm'>3.</span>
+      <b>Repetitive squaring of a complex number and then adding another complex number to it:</b>
+      <br />
+    </div>
+  </div>
+  <div class='para-brk'></div>
 
-  <h4></h4>
-  <p>
-    If this result approaches Zero then we conclude that the given complex number is in the "Mandelbrot set".<br />
-    Otherwise, we conclude that the given complex number is not in the "Mandelbrot set".<br />
-    <br />
-    For each complex number that is not part of the Mandelbrot set<br />
-    we are interested in knowing how quickly we are able to decide that the<br />
-    results of the mathematical operation will not approach Zero.<br />
-    <br />
-    This property of the result not approaching Zero, is referred to as 'escaping to Infinity'<br />
-      - if it is not moving towards Zero, then it must be moving towards Infinity.<br />
-    <br />
-    How can I be sure that when I perform this operation repeatedly,<br />
-    the result will not remain unchanged - neither approach Zero nor escape to Infinity?<br />
-    <br />
-    to find the answer for these questions, let us look at this mathematical operation:<br />
-    <br />
-    initialize z = 0<br />
-    c = z^2 + c<br />
-    
-  </p>
-
-  <p>
-    z_n+1 = z_n^2 + c<br />
-    z_1 = 0^2 + c when n = 0<br />
-    z_2 = c^2 + c when n = 1<br />
-    z_3 = (c^2+c)^2 + c when n = 2<br />
-    z+4 = ((c^2+c)^2+c)^2 + c<br />
-  </p>
+  <div class='para'>
+    <div class='idx'>4.</div>
+    <div class='x'>
+      <span class='idx-sm'>5.</span>
+      <b>Checking if the resulting complex number has been staying bounded:</b>
+      <br />
+    </div>
+  </div>
+  <div class='para-brk'></div>
 
 </div>
 
