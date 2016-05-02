@@ -1,12 +1,3 @@
 h1. blog.quineloop.com - jekyll source site structure for the quineloop blog
 
-h1. License
 
-The structure of this site is inspired from: http://github.com/mojombo/jekyll
-
-The contents of the following directories are Copyright Gautam Chekuri.
-You may not reuse anything therein without my permission:
-* _posts/
-* images/
-The CSS for this site is based on http://www.ez-css.org/ used under the MIT License.
-All other directories and files are MIT Licensed.
