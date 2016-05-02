@@ -9,11 +9,9 @@ h3. {{ page.title }}
 
 <div class="post_payload">
 
-  <h3> --------- Work in progress ------------</h3>
-
   <center>
     <div id="rendering-mandelbrot" class="center">
-      <b>Rendering Mandelbrot set!</b> <img src="/images/spinner.gif" />
+      <b>Rendering Mandelbrot set - this will take a few seconds...</b> <img src="/images/spinner.gif" />
     </div>
     <div id="mandelbrot">
     </div>
@@ -341,11 +339,25 @@ for(var r = 0; r < width; r++) {
 <pre>
 > var z = { r: 1.5, i: 1.5 }
   var square_of_z = { r: null, i: null }
+
+  // Wrong implementation - z.r is already changed in the first statement
+  // before it was used in the second statement
+  // z.r = (z.r * z.r) - (z.i * z.i)
+  // z.i = (2 * z.r * z.i)  // z.r was updated above! this is not the correct!
+
+  // Correct implementation - z.r & z.i remain unchanged
+  // when the next two statements are executed
   square_of_z.r = (z.r * z.r) - (z.i * z.i)
   square_of_z.i = (2 * z.r * z.i)
+
 > square_of_z
   Object { r: 0, i: 4.5 }
 </pre>
+    To correctly calculate the two components of the resultant squared complex number,
+    we should make sure that the original complex number is not updated when the product is still being calculated.<br />
+    The two statements which calculate the Real and Imaginary components of the product should execute as if they were 
+    a single statement.<br />
+    <br />
     Adding two complex numbers, simply adds the two Real parts and the two Imaginary parts respectively.<br />
 <pre>
 > square_of_z = { r: 0, i: 4.5 } 
@@ -406,6 +418,95 @@ for(var r = 0; r < width; r++) {
       <span class='idx-sm'>4.</span>
       <b>Checking if the resulting complex number has been staying bounded:</b>
       <br />
+      Now that we have implemented the repetitive mathematical operation, we need to figure out:<br />
+      (a) The logic to stop the while loop's execution<br />
+      (b) The logic for assigning a color to each pixel<br />
+      <br />
+      (a) To stop the while loop we have to detect if the value of z has remained bounded or if it is escaping to Infinity.<br />
+      <br />
+      According to the <a href="https://en.wikipedia.org/wiki/Mandelbrot_set#Escape_time_algorithm" target="_blank">Wikipedia entry
+      for Mandelbrot_set</a>, if the absolute value of z exceeds 2 then we can conclude that z will escaping to Infinity - I still need
+      to figure out the reasoning behind this.<br />
+      Therefore, we use the absolute value of z as a condition to stop the while loop.<br />
+      <br />
+      Additionally, complex numbers that are part of the Mandelbrot set, will never escape - i.e their absolute value will never exceed 2.
+      For such values of z, we have to use a second condition to stop the while loop.<br />
+      This second condition simply counts the number of times the while loop is executed and uses it to stop execution,
+      if the loop has executed more than a 1000 times - again, 1000 is a number that is mentioned in the Wikipedia page.<br />
+      <br />
+      (b) For assigning a color to each pixel, we can use a D3.js scale that maps the number of times
+      the while loop executed to RGB value or a Alpha value.<br />
+      In the following block of code we use a linear scale to assign a shade of blue color to each pixel that is not in the Mandelbrot set:
+
+<pre>
+var width = 200, height = 200, canvas, ctx, one_pixel, real_scale, imaginary_scale
+
+canvas = document.getElementById("demo").appendChild(
+  document.createElement('canvas')
+)
+canvas.setAttribute("height", height)
+canvas.setAttribute("width", width)
+ctx = canvas.getContext('2d')
+one_pixel = ctx.createImageData(1, 1)
+
+real_scale = d3.scale.linear()
+  .domain([0, width])
+  .range([-2.0, 1])
+
+imaginary_scale = d3.scale.linear()
+  .domain([0, height])
+  .range([1, -1])
+
+var blue_scale = d3.scale.pow()
+      .domain([1,20])
+      .range([50, 255])
+
+for(var r = 0; r < width; r++) {
+  for(var i = 0; i < height; i++) {
+
+    // c => The given complex number
+    var c = { r: real_scale(r), i: imaginary_scale(i) }
+    var z = { r: 0, i: 0 }
+    var math_op_loop_count = 0
+    var max_op_loop_count = 1000
+
+    // (z.r * z.r) + (z.i * z.i) => Absolute value of the complex number z 
+    while( ((z.r * z.r) + (z.i * z.i) < 2) && (math_op_loop_count < max_op_loop_count) ) {
+
+      // square z - remember that z.r and z.i must both be
+      // updated at the same time; hence we use new_z to
+      // temporarily store the partially calculated result
+      var new_z = {}
+      new_z.r = (z.r * z.r) - (z.i * z.i)
+      new_z.i = (2 * z.r * z.i)
+
+      // add c to new_z
+      new_z.r = new_z.r + c.r
+      new_z.i = new_z.i + c.i
+
+      z = new_z
+
+      math_op_loop_count = math_op_loop_count + 1
+    }
+
+    if( math_op_loop_count == max_op_loop_count ) {
+      one_pixel.data[0] = 0
+      one_pixel.data[1] = 0
+      one_pixel.data[2] = 0
+      one_pixel.data[3] = 255
+      ctx.putImageData(one_pixel, r, i)
+    } else {
+      one_pixel.data[0] = 0
+      one_pixel.data[1] = 0
+      one_pixel.data[2] = blue_scale(math_op_loop_count)
+      one_pixel.data[3] = 255
+      ctx.putImageData(one_pixel, r, i)
+    }
+  }
+}
+</pre>
+    <a href="#" class="btn btn-primary" id="run_demo">Run this code to see the output.</a><br />
+    <div style="margin-top: 10px;" id="demo"></div>
     </div>
   </div>
   <div class='para-brk'></div>
@@ -414,8 +515,9 @@ for(var r = 0; r < width; r++) {
     <div class='idx'>5.</div>
     <div class='x'>
       <span class='idx-sm'>5.</span>
-      <b>Implementation avoiding objects for representing the complex numbers:</b>
-      <br />
+      Knowing about the Mandelbrot set and understanding the basic algorithm to visualizing it, is indeed very useful.<br />
+      The algorithm can be used to implement is computationally intensive code.<br />
+      The CUDA GPU programming SDK includes the Mandelbrot set as one of the examples.<br />
     </div>
   </div>
   <div class='para-brk'></div>
