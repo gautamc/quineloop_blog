@@ -527,8 +527,7 @@ for(var r = 0; r < width; r++) {
 <script>
   window.addEventListener(
     'load', function(event) {
-       /* ["/js/all_mandelbrot.js"] */
-       ["/js/d3.v3.min.js", "/js/mandelbrot.js"].forEach(function(script_src_url) {
+       ["/js/all_mandelbrot.js"].forEach(function(script_src_url) {
          var script_element = window.document.createElement('script')
          script_element.src = script_src_url
          script_element.type = 'text/javascript'
