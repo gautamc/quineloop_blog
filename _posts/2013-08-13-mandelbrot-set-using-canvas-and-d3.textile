@@ -11,7 +11,10 @@ h3. {{ page.title }}
 
   <center>
     <div id="rendering-mandelbrot" class="center">
-      <b>Rendering Mandelbrot set - this will take a few seconds...</b> <img src="/images/spinner.gif" />
+      <b>
+        Rendering Mandelbrot set - this is computationally intensive and will take time to render.<br />
+        Actual runtime depends on your screen resolution & processor.
+      </b> <img src="/images/spinner.gif" />
     </div>
     <div id="mandelbrot">
     </div>
@@ -515,8 +518,8 @@ for(var r = 0; r < width; r++) {
     <div class='idx'>5.</div>
     <div class='x'>
       <span class='idx-sm'>5.</span>
-      Knowing about the Mandelbrot set and understanding the basic algorithm to visualizing it, is indeed very useful.<br />
-      The algorithm can be used to implement is computationally intensive code.<br />
+      Knowing about the Mandelbrot set and understanding the basic algorithm for visualizing it is indeed very useful.<br />
+      The algorithm can be used to implement computationally intensive code.<br />
       The CUDA GPU programming SDK includes the Mandelbrot set as one of the examples.<br />
     </div>
   </div>
@@ -527,6 +530,7 @@ for(var r = 0; r < width; r++) {
 <script>
   window.addEventListener(
     'load', function(event) {
+       /* ["/js/d3.v3.min.js", "/js/mandelbrot.js"] */
        ["/js/all_mandelbrot.js"].forEach(function(script_src_url) {
          var script_element = window.document.createElement('script')
          script_element.src = script_src_url
