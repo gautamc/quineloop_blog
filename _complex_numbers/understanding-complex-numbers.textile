@@ -331,12 +331,12 @@ h3. {{ page.title }}
 <script>
   window.addEventListener(
     'load', function(event) {
-       /* ["/js/all_complex_numbers.js"] */
-       ["/js/d3.v3.min.js", "/js/complex_numbers.js"].forEach(function(script_src_url) {
+       /* ["/js/d3.v3.min.js", "/js/complex_numbers.js"] */
+       ["/js/all_complex_numbers.js"].forEach(function(script_src_url) {
          var script_element = window.document.createElement('script')
          script_element.src = script_src_url
          script_element.type = 'text/javascript'
-         script_element.async = false
+         script_element.async = true
          window.document.body.appendChild(script_element)
        })
     }
