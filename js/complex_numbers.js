@@ -32,8 +32,10 @@ $(document).ready(
       .tickFormat(function(d){
         if( d == 0 )
           return d
-        else if ( d == 1 || d == -1 )
+        else if ( d == 1 )
           return 'i'
+        else if ( d == -1 )
+          return '-i'
         else
           return d + 'i';
       });
